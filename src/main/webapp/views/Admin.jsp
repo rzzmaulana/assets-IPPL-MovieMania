@@ -202,7 +202,7 @@
           Delete movie
         </button>
         <button type="button" class="btn btn-primary rounded-lg">
-          Edit movies123.
+          Edit movies12322.
         </button>
       </div>
     </div>
