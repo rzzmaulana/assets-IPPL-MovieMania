@@ -1,0 +1,8 @@
+com\mycompany\cobamoviemania\JakartaRestConfiguration.class
+com\mycompany\cobamoviemania\resources\JakartaEE8Resource.class
+model\Sign.class
+model\Reviews.class
+model\Movie.class
+model\User.class
+controller\MainController.class
+model\Admin.class
