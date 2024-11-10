@@ -9,33 +9,90 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import model.User;
 
 public class UserDao {
+    
+    private final String url = "jdbc:mysql://localhost:3306/mydb";
+    private final String user = "root";
+    private final String password = "ori2305";
 
-    public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/mydb";
-        String user = "root";
-        String password = "ori2305";
+    // Method to insert a new user
+    public boolean insertUser(String username, String password) {
+        String checkQuery = "SELECT username FROM users WHERE username = ?";
+        String insertQuery = "INSERT INTO users (username, password) VALUES (?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(url, user, password)) {
-            String query = "SELECT username FROM users";
-            Statement statement = conn.createStatement();
-              
-            ResultSet resultSet = statement.executeQuery(query);
+        try (Connection conn = DriverManager.getConnection(url, user, this.password);
+             PreparedStatement checkStatement = conn.prepareStatement(checkQuery)) {
 
-            
-            while (resultSet.next()) {
-                String username = resultSet.getString("username");
-                System.out.println("Username: " + username);
-            } //else {
-                //System.out.println("No data found.");
-            //}
+            // Check if the username already exists
+            checkStatement.setString(1, username);
+            ResultSet resultSet = checkStatement.executeQuery();
 
-            resultSet.close();
-            statement.close();
+            if (resultSet.next()) {
+                // Username already exists
+                System.out.println("Username is already taken.");
+                return false;
+            }
+
+            // Username is unique; proceed with insertion
+            try (PreparedStatement insertStatement = conn.prepareStatement(insertQuery)) {
+                insertStatement.setString(1, username);
+                insertStatement.setString(2, password);
+                int rowsInserted = insertStatement.executeUpdate();
+                return rowsInserted > 0; // Returns true if insertion is successful
+            }
 
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error inserting user: " + e.getMessage());
+            return false;
         }
     }
+
+    // Method to get a list of all users
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT username,password FROM users";
+
+        try (Connection conn = DriverManager.getConnection(url, user, this.password);
+             Statement statement = conn.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                String password= resultSet.getString("password");
+                User user = new User(username,password);
+                users.add(user); // Add each username to the list
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving users: " + e.getMessage());
+        }
+        
+        return users;
+    }
+    
+        public boolean validateUser(String username, String password) {
+        String query = "SELECT username,password FROM users WHERE username = ? AND password = ?";
+        
+        try (Connection conn = DriverManager.getConnection(url, user, this.password);
+             PreparedStatement statement = conn.prepareStatement(query)) {
+
+            statement.setString(1, username);
+            statement.setString(2, password);
+            
+            ResultSet resultSet = statement.executeQuery();
+            
+            // Return true if a matching user is found
+            return resultSet.next();
+
+        } catch (SQLException e) {
+            System.out.println("Error validating user: " + e.getMessage());
+            return false;
+        }
+    }
+
+    
 }

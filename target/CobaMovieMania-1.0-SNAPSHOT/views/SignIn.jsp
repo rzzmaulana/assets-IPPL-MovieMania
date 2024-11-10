@@ -135,7 +135,7 @@
   <body>
     <div class="signup-container">
       <h2>SIGN IN</h2>
-      <form action=" " method="post">
+      <form action="User" method="post">
           
       <div class="input-group mb-3">
         <span class="input-group-text" id="username-icon"

@@ -12,16 +12,22 @@ import java.util.List;
  * @author acer
  */
 public class User {
-    protected int userID;
+    protected static int userID;
     protected String username;
     protected String password;
+    final protected boolean isAdmin=false;
       // Aggregation relationship with Review
 
-    public User(int userID, String username, String password) {
-        this.userID = userID;
+    public User( String username, String password) {
+        
         this.username = username;
         this.password = password;
+        userID++;
         
+    }
+    
+    public String getUsername(){
+        return username;
     }
 
     
