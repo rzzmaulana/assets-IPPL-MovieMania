@@ -19,58 +19,56 @@ import javax.servlet.http.HttpServletResponse;
  * @author acer
  */
 @WebServlet(name = "UserController", urlPatterns = {"/User"})
-public class UserController extends HttpServlet{
+public class UserController extends HttpServlet {
+    private UserDao userDao;
+
+    @Override
+    public void init() throws ServletException {
+        userDao = new UserDao();
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String action = request.getParameter("action");
-            
             out.print(request.getContextPath());
-            
-
+        }
     }
 
-    
-    } 
-    
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Forward the GET request to processRequest
-        String name=request.getParameter("username");
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        String name = request.getParameter("username");
         response.getWriter().print(name);
     }
-    
-     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    
 
-    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
         handleSignIn(request, response);
-    
-}
-    
-    private void handleSignIn(HttpServletRequest request, HttpServletResponse response) 
-        throws ServletException, IOException {
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-
-    UserDao userDao = new UserDao();
-    
-    
-    boolean isValidUser = userDao.validateUser(username, password);
-    List<User>users=userDao.getAllUsers();
-    response.getWriter().print(users.get(0).getUsername());
-    response.getWriter().print(isValidUser);
-    if (isValidUser) {
-        
-        request.getSession().setAttribute("username", username);
-        response.sendRedirect("/views/UserWelcome.jsp"); // Redirect to dashboard or main page
-    } else {
-        
-        request.setAttribute("errorMessage", "Invalid username or password");
-       // request.getRequestDispatcher("/views/SignIn.jsp").forward(request, response);
-       
-       response.getWriter().print(password);
     }
-}
 
+    private void handleSignIn(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        if (userDao == null) {
+            userDao = new UserDao(); // Ensures userDao is not null
+        }
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        boolean isValidUser = userDao.validateUser(username, password);
+        List<User> users = userDao.getAllUsers();
+        response.getWriter().print(users.size());
+        response.getWriter().print(isValidUser);
+
+        if (isValidUser) {
+            request.getSession().setAttribute("username", username);
+            response.sendRedirect("/views/UserWelcome.jsp");
+        } else {
+            request.setAttribute("errorMessage", "Invalid username or password");
+            response.getWriter().print(password);
+        }
+    }
 }

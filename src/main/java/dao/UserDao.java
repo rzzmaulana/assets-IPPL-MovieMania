@@ -18,7 +18,7 @@ public class UserDao {
     private final String url = "jdbc:mysql://localhost:3306/mydb";
     private final String user = "root";
     private final String password = "ori2305";
-
+    public UserDao(){};
     // Method to insert a new user
     public boolean insertUser(String username, String password) {
         String checkQuery = "SELECT username FROM users WHERE username = ?";
