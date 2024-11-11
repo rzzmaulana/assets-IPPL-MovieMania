@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,18 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 import model.User;
 
+/**
+ *
+ * @author acer
+ */
 public class UserDao {
-    
-    private final String url = "jdbc:mysql://localhost:3306/mydb";
+  private final String url ="jdbc:mysql://localhost:3306/mydb?useSSL=false&serverTimezone=UTC";
     private final String user = "root";
-    private final String password = "ori2305";
+    private final String pasword = "ori2305";
     public UserDao(){};
     // Method to insert a new user
     public boolean insertUser(String username, String password) {
         String checkQuery = "SELECT username FROM users WHERE username = ?";
         String insertQuery = "INSERT INTO users (username, password) VALUES (?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(url, user, this.password);
+        try (Connection conn = DriverManager.getConnection(url, user, pasword);
              PreparedStatement checkStatement = conn.prepareStatement(checkQuery)) {
 
             // Check if the username already exists
@@ -56,7 +60,7 @@ public class UserDao {
         List<User> users = new ArrayList<>();
         String query = "SELECT username,password FROM users";
 
-        try (Connection conn = DriverManager.getConnection(url, user, this.password);
+        try (Connection conn = DriverManager.getConnection(url, user, pasword);
              Statement statement = conn.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
@@ -77,7 +81,7 @@ public class UserDao {
         public boolean validateUser(String username, String password) {
         String query = "SELECT username,password FROM users WHERE username = ? AND password = ?";
         
-        try (Connection conn = DriverManager.getConnection(url, user, this.password);
+        try (Connection conn = DriverManager.getConnection(url, user, pasword);
              PreparedStatement statement = conn.prepareStatement(query)) {
 
             statement.setString(1, username);
@@ -94,5 +98,13 @@ public class UserDao {
         }
     }
 
-    
+    public static void main(String[] args) {
+        UserDao userDao = new UserDao();
+        boolean isInserted = userDao.insertUser("testuser", "password");
+        System.out.println("User inserted: " + isInserted);
+
+        List<User> users = userDao.getAllUsers();
+        System.out.println("Total users: " + users.size());
+    }
 }
+

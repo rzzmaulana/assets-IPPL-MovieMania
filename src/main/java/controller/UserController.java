@@ -22,9 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController extends HttpServlet {
     private UserDao userDao;
 
-    @Override
-    public void init() throws ServletException {
-        userDao = new UserDao();
+    
+    public UserController(){
+        userDao=new UserDao();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -51,13 +51,12 @@ public class UserController extends HttpServlet {
 
     private void handleSignIn(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        if (userDao == null) {
-            userDao = new UserDao(); // Ensures userDao is not null
-        }
+           
+        
 
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        
         boolean isValidUser = userDao.validateUser(username, password);
         List<User> users = userDao.getAllUsers();
         response.getWriter().print(users.size());
@@ -71,4 +70,6 @@ public class UserController extends HttpServlet {
             response.getWriter().print(password);
         }
     }
+
+    
 }
