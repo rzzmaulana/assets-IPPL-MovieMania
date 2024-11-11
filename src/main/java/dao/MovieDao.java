@@ -55,6 +55,10 @@ public class MovieDao {
         }
     }
 
+    
+    
+    
+    
     // Method to update an existing movie
     public boolean updateMovie(int movieID, String title, String description, String posterUrl) throws SQLException {
         String sql = "UPDATE movies SET title = ?, description = ?, poster_url = ? WHERE movieID = ?";

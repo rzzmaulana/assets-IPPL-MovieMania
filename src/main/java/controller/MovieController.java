@@ -48,6 +48,18 @@ public class MovieController  extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if ("addMovie".equals(action)) {
+            AddMovie(request, response);
+        } else if ("signin".equals(action)) {
+            
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+        }
+    }
+    
+    protected void AddMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String title = request.getParameter("judul");
         String description = request.getParameter("description");
         String rating=request.getParameter("rating");
@@ -83,7 +95,8 @@ public class MovieController  extends HttpServlet{
             Logger.getLogger(MovieController.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (movieAdded) {
-            response.sendRedirect("Movie"); // Refresh the movie list
+            
+            response.sendRedirect("/views/Admin.jsp"); // Refresh the movie list
             
         } else {
             response.getWriter().print(title);

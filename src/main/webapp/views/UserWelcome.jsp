@@ -207,10 +207,10 @@
       <p>What would you like to do?</p>
 
       <div class="d-flex justify-content-center gap-3">
-        <button type="button" class="btn btn-primary rounded-lg">
+        <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='PageFilm.jsp'">
           Search Movies
         </button>
-        <button type="button" class="btn btn-primary rounded-lg">
+        <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='HapusFilm.jsp'">
           Movies Recommendation
         </button>
         

@@ -100,7 +100,7 @@
   </head>
   <body>
       <%-- Display the action parameter value here --%>
-        <%= request.getAttribute("actionValue") %>
+        <%= request.getAttribute("") %>
       
     <div class="container">
       <div class="movie-title"></div>

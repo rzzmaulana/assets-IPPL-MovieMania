@@ -194,17 +194,17 @@
 
       <p>What would you like to do?</p>
 
-      <div class="d-flex justify-content-center gap-3">
-        <button type="button" class="btn btn-primary rounded-lg">
-          Add movie
-        </button>
-        <button type="button" class="btn btn-primary rounded-lg">
-          Delete movie
-        </button>
-        <button type="button" class="btn btn-primary rounded-lg">
-          Edit movies.
-        </button>
-      </div>
+       <div class="d-flex justify-content-center gap-3">
+            <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='AddMovie.jsp'">
+                Add movie
+            </button>
+            <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='HapusFilm.jsp'">
+                Delete movie
+            </button>
+            <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='editFilmInput.jsp'">
+                Edit movies
+            </button>
+        </div>
     </div>
 
     <!-- Bootstrap JS (optional) -->
