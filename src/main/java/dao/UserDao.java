@@ -19,15 +19,26 @@ import model.User;
  * @author acer
  */
 public class UserDao {
-  private final String url ="jdbc:mysql://localhost:3306/mydb?useSSL=false&serverTimezone=UTC";
+  private final String url ="jdbc:mysql://localhost:3306/mydb";
     private final String user = "root";
     private final String pasword = "ori2305";
     public UserDao(){};
+    
+    
+    
+    
     // Method to insert a new user
     public boolean insertUser(String username, String password) {
         String checkQuery = "SELECT username FROM users WHERE username = ?";
         String insertQuery = "INSERT INTO users (username, password) VALUES (?, ?)";
-
+        
+        try {
+    Class.forName("com.mysql.cj.jdbc.Driver");
+} catch (ClassNotFoundException e) {
+    System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+}
+        
+        
         try (Connection conn = DriverManager.getConnection(url, user, pasword);
              PreparedStatement checkStatement = conn.prepareStatement(checkQuery)) {
 
@@ -60,6 +71,11 @@ public class UserDao {
         List<User> users = new ArrayList<>();
         String query = "SELECT username,password FROM users";
 
+        try {
+    Class.forName("com.mysql.cj.jdbc.Driver");
+} catch (ClassNotFoundException e) {
+    System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+}
         try (Connection conn = DriverManager.getConnection(url, user, pasword);
              Statement statement = conn.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
@@ -80,7 +96,11 @@ public class UserDao {
     
         public boolean validateUser(String username, String password) {
         String query = "SELECT username,password FROM users WHERE username = ? AND password = ?";
-        
+        try {
+    Class.forName("com.mysql.cj.jdbc.Driver");
+} catch (ClassNotFoundException e) {
+    System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+}
         try (Connection conn = DriverManager.getConnection(url, user, pasword);
              PreparedStatement statement = conn.prepareStatement(query)) {
 

@@ -64,7 +64,7 @@ public class UserController extends HttpServlet {
 
         if (isValidUser) {
             request.getSession().setAttribute("username", username);
-            response.sendRedirect("/views/UserWelcome.jsp");
+           // response.sendRedirect("/views/UserWelcome.jsp");
         } else {
             request.setAttribute("errorMessage", "Invalid username or password");
             response.getWriter().print(password);
