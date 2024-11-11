@@ -88,7 +88,7 @@ public class UserController extends HttpServlet implements Sign{
         }else if(validateAdmin){
             User user=userDao.selectAdmin(username, password);
             request.getSession().setAttribute("user", user);
-            response.sendRedirect("/views/UserWelcome.jsp");
+            response.sendRedirect("/views/Admin.jsp");
         } else {
             response.getWriter().println("Invalid username or password.");
             response.sendRedirect("/views/SignIn.jsp");

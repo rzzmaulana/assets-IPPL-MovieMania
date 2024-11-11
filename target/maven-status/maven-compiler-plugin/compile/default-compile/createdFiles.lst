@@ -4,6 +4,8 @@ com\mycompany\cobamoviemania\resources\JakartaEE8Resource.class
 dao\UserDao.class
 model\Sign.class
 model\Reviews.class
+controller\MovieController.class
 model\Movie.class
 model\User.class
 controller\MainController.class
+dao\MovieDao.class

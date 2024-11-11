@@ -29,7 +29,7 @@ public class Movie {
         this.releaseDate = releaseDate;
         this.description = description;
         this.posterUrl = posterUrl;
-        this.reviews = new ArrayList<>();
+        
     }
 
     public int getMovieID() {
