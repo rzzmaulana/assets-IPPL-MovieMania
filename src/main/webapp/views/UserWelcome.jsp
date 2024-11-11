@@ -4,6 +4,7 @@
     Author     : acer
 --%>
 
+<%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,6 +32,7 @@
         font-family: "Poppins", sans-serif;
         font-weight: 100;
         font-style: normal;
+        
       }
 
       .poppins-extralight {
@@ -189,6 +191,16 @@
     </style>
   </head>
   <body>
+       <%
+    User user = (User) session.getAttribute("user"); // Cast the object to User type
+
+    if (user != null) {
+        
+    } else {
+        out.print("User not found in session. Please log in again.");
+    }
+%>
+
     <div class="admin-panel">
       <span class="icon-handwave">👋 Welcome To Movie Mania!</span>
 

@@ -135,8 +135,8 @@
   <body>
     <div class="signup-container">
       <h2>SIGN IN</h2>
-      <form action="User" method="post">
-          
+      <form action="/User" method="post">
+       <input type="hidden" name="action" value="signin">
       <div class="input-group mb-3">
         <span class="input-group-text" id="username-icon"
           ><svg
@@ -193,7 +193,7 @@
      
       <div>
         Don't have an account?
-        <a href="views/SignUp" class="signin-link"> Register now</a>
+        <a href="/views/SignUp.jsp" class="signin-link"> Register now</a>
         
       </div>
     </div>

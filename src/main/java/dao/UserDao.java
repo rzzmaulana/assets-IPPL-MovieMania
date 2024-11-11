@@ -95,7 +95,7 @@ public class UserDao {
     }
     
         public boolean validateUser(String username, String password) {
-        String query = "SELECT username,password FROM users WHERE username = ? AND password = ?";
+        String query = "SELECT username,password FROM users WHERE username = ? AND password = ? and isAdmin = ?";
         try {
     Class.forName("com.mysql.cj.jdbc.Driver");
 } catch (ClassNotFoundException e) {
@@ -106,6 +106,7 @@ public class UserDao {
 
             statement.setString(1, username);
             statement.setString(2, password);
+            statement.setString(3, "0");
             
             ResultSet resultSet = statement.executeQuery();
             
@@ -117,6 +118,114 @@ public class UserDao {
             return false;
         }
     }
+        
+        public boolean validateAdmin(String username, String password) {
+        String query = "SELECT username,password FROM users WHERE username = ? AND password = ? and isAdmin = ?";
+        try {
+    Class.forName("com.mysql.cj.jdbc.Driver");
+} catch (ClassNotFoundException e) {
+    System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+}
+        try (Connection conn = DriverManager.getConnection(url, user, pasword);
+             PreparedStatement statement = conn.prepareStatement(query)) {
+
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.setString(3, "1");
+            
+            ResultSet resultSet = statement.executeQuery();
+            
+            // Return true if a matching user is found
+            return resultSet.next();
+
+        } catch (SQLException e) {
+            System.out.println("Error validating user: " + e.getMessage());
+            return false;
+        }
+    }
+        
+    
+    public User selectUser(String username, String password) {
+    String query = "SELECT userID, username, password, fullname FROM users WHERE username = ? AND password = ? AND isAdmin = ?";
+    User userr = null; // Initialize as null to return if not found
+
+    // Load MySQL JDBC Driver
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+        System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+    }
+
+    // Try to connect to the database and execute the query
+    try (Connection conn = DriverManager.getConnection(url, user, pasword); // Use DB credentials, not user’s password
+         PreparedStatement statement = conn.prepareStatement(query)) {
+        
+        statement.setString(1, username);
+        statement.setString(2, password);
+        statement.setString(3, "0"); // Assuming 0 is for a regular user, not an admin
+        
+        ResultSet resultSet = statement.executeQuery();
+        
+        // If a matching user is found, create a User object
+        if (resultSet.next()) {
+            int userID = resultSet.getInt("userID"); // Retrieve userID
+            String dbUsername = resultSet.getString("username");
+            String dbPassword = resultSet.getString("password");
+            String fullname = resultSet.getString("fullname");
+            
+            // Create a User object with userID, username, password, and fullname
+            userr = new User(dbUsername, dbPassword);
+            userr.setID(userID);
+            userr.setFullname(fullname);
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error validating user: " + e.getMessage());
+    }
+
+    return userr; // Returns the User object if found, or null if not found
+}
+
+    public User selectAdmin(String username, String password) {
+    String query = "SELECT userID, username, password, fullname FROM users WHERE username = ? AND password = ? AND isAdmin = ?";
+    User userr = null; // Initialize as null to return if not found
+
+    // Load MySQL JDBC Driver
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+        System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+    }
+
+    // Try to connect to the database and execute the query
+    try (Connection conn = DriverManager.getConnection(url, user, pasword); // Use DB credentials, not user’s password
+         PreparedStatement statement = conn.prepareStatement(query)) {
+        
+        statement.setString(1, username);
+        statement.setString(2, password);
+        statement.setString(3, "1"); // Assuming 0 is for a regular user, not an admin
+        
+        ResultSet resultSet = statement.executeQuery();
+        
+        // If a matching user is found, create a User object
+        if (resultSet.next()) {
+            int userID = resultSet.getInt("userID"); // Retrieve userID
+            String dbUsername = resultSet.getString("username");
+            String dbPassword = resultSet.getString("password");
+            String fullname = resultSet.getString("fullname");
+            
+            // Create a User object with userID, username, password, and fullname
+            userr = new User(dbUsername, dbPassword);
+            userr.setID(userID);
+            userr.setFullname(fullname);
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error validating user: " + e.getMessage());
+    }
+
+    return userr; // Returns the User object if found, or null if not found
+}
 
     public static void main(String[] args) {
         UserDao userDao = new UserDao();

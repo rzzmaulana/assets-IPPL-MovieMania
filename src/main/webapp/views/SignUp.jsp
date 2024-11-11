@@ -133,8 +133,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="signup-container">
-      <h2>SIGN UP</h2>
+     <div class="signup-container">
+      <h2>Sign Up</h2>
+      <form action="/User" method="post">
+       <input type="hidden" name="action" value="signup">
       <div class="input-group mb-3">
         <span class="input-group-text" id="username-icon"
           ><svg
@@ -156,6 +158,7 @@
           placeholder="Username"
           aria-label="Username"
           aria-describedby="username-icon"
+          name="username"
         />
       </div>
       <div class="input-group mb-3">
@@ -179,19 +182,24 @@
           placeholder="Password"
           aria-label="Password"
           aria-describedby="password-icon"
+          name="password"
         />
       </div>
-      <button type="button" class="btn btn-primary" onclick="window.location.href='views/SignIn.jsp'">Sign Up</button>
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
       <div class="divider">
         <span class="divider-text">Or</span>
       </div>
+     
       <div>
         Already have an account?
-        <a href="views/SignIn.jsp" class="signin-link"> Sign in now</a>
+        <a href="/views/SignIn.jsp" class="signin-link"> Sign In</a>
+        
       </div>
-      
-       <!-- Display 'a' directly -->
     </div>
+      
+      
+    
     <!-- Bootstrap JS (optional) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>

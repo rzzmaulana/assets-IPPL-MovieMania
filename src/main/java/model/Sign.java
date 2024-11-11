@@ -4,11 +4,15 @@
  */
 package model;
 
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  *
  * @author acer
  */
 public interface Sign {
-    void login(String username, String password);
-    void signUp(String username, String password);
+    void login(HttpServletRequest request, HttpServletResponse response)throws IOException ;
+    void SignUp(HttpServletRequest request, HttpServletResponse response)throws IOException ;
 }

@@ -12,24 +12,47 @@ import java.util.List;
  * @author acer
  */
 public class User {
-    protected static int userID;
+    protected  int userID;
     protected String username;
     protected String password;
+    protected String fullname;
     final protected boolean isAdmin=false;
       // Aggregation relationship with Review
 
+    public User(){};
+    
     public User( String username, String password) {
         
         this.username = username;
         this.password = password;
-        userID++;
+       
         
     }
     
     public String getUsername(){
         return username;
     }
+    
+    public void setID(int userID){
+        this.userID=userID;
+    }
+    
+    public void setFullname(String fullname){
+        this.fullname=fullname;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    
+    
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
     
     public void login(String username, String password) {
         System.out.println("User logged in with username: " + username);

@@ -13,13 +13,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Sign;
 
 /**
  *
  * @author acer
  */
 @WebServlet(name = "UserController", urlPatterns = {"/User"})
-public class UserController extends HttpServlet {
+public class UserController extends HttpServlet implements Sign{
     private UserDao userDao;
 
     
@@ -44,32 +45,56 @@ public class UserController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        handleSignIn(request, response);
-    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
 
-    private void handleSignIn(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-           
-        
-
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        boolean isValidUser = userDao.validateUser(username, password);
-        List<User> users = userDao.getAllUsers();
-        response.getWriter().print(users.size());
-        response.getWriter().print(isValidUser);
-
-        if (isValidUser) {
-            request.getSession().setAttribute("username", username);
-           // response.sendRedirect("/views/UserWelcome.jsp");
+        if ("signup".equals(action)) {
+            SignUp(request, response);
+        } else if ("signin".equals(action)) {
+            login(request, response);
         } else {
-            request.setAttribute("errorMessage", "Invalid username or password");
-            response.getWriter().print(password);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
         }
     }
 
-    
+    public void SignUp(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Assume registerUser adds a new user to the database
+         boolean success=userDao.insertUser(username, password);
+        
+        if (success) {
+            
+            response.sendRedirect("/views/SignIn.jsp"); // Redirect after successful registration
+        } else {
+            response.getWriter().println("Sign up failed. Try again.");
+        }
+    }
+
+    @Override
+    public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        boolean validateUser=userDao.validateUser(username, password);
+        boolean validateAdmin=userDao.validateAdmin(username, password);
+        if (validateUser) {
+            User user=userDao.selectUser(username, password);
+            
+           
+            request.getSession().setAttribute("user", user);
+            response.sendRedirect("/views/UserWelcome.jsp"); // Redirect to dashboard if sign-in is successful
+        }else if(validateAdmin){
+            User user=userDao.selectAdmin(username, password);
+            request.getSession().setAttribute("user", user);
+            response.sendRedirect("/views/UserWelcome.jsp");
+        } else {
+            response.getWriter().println("Invalid username or password.");
+            response.sendRedirect("/views/SignIn.jsp");
+        } 
+    }
 }
+
+    
+
