@@ -125,6 +125,11 @@ main {
     font-size: 0.9em;
 }
 
+a{
+    text-decoration: none;
+    color:white;
+}
+
     </style>
     
 </head>
@@ -163,17 +168,20 @@ main {
     <div class="movie-grid">
         <% if (movies != null) { %>
             <% for (Movie movie : movies) { %>
-                <div class="movie-card">
-                    <div class="movie-thumbnail">
-                        <!-- Assuming movie has a method getPosterUrl() that returns the URL of the poster -->
-                        <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+           
+                <a href="/Movie?action=DisplayFilm&movieID=<%= movie.getMovieID() %>" class="movie-card-link">
+                    <div class="movie-card">
+                        <div class="movie-thumbnail">
+                            <!-- Display the poster image -->
+                            <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+                        </div>
+                        <p class="movie-title"><%= movie.getTitle() %></p>
+                        <p class="movie-title"><%= movie.getGenre() %></p>
+                         <p class="movie-title"><%= movie.getReleaseDate() %></p>
+                        <!-- Add other movie details if needed -->
                     </div>
-                    <p class="movie-title"><%= movie.getTitle() %></p>
-                    
-                    <p class="movie-release-date">Release Date: <%= movie.getReleaseDate() %></p> <!-- Assuming getReleaseDate() is available -->
-                    
-                </div>
-            <% } %> 
+                </a>
+            <% } %>
         <% } else { %>
             <p>No movies available to display.</p>
         <% } %>

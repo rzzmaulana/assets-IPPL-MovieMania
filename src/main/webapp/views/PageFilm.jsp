@@ -4,6 +4,7 @@
     Author     : acer
 --%>
 
+<%@page import="model.Movie"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +84,7 @@
         margin-top: 30px;
       }
 
-      .Judul , .Genre, .Rating, .Umur,.Review{
+      .Judul , .Genre, .Rating, .Deskripsi,.Review{
         background-color: none;
         border-radius: 10px;
         padding: 15px;
@@ -100,22 +101,24 @@
   </head>
   <body>
       <%-- Display the action parameter value here --%>
-        <%= request.getAttribute("") %>
+      <%
+       Movie movie=(Movie) request.getSession().getAttribute("SingleMovie");
+%>
       
     <div class="container">
-      <div class="movie-title"></div>
+      <div class="movie-title"> <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" /></div>
       <div class="Info">
         <div class="Judul">
-          <div>Judul Film</div>
+            <div>Title : <%= movie.getTitle() %></div>
         </div>
         <div class="Genre">
-            <div>Genre</div>
+            <div>Genre : <%= movie.getGenre()  %></div>
         </div>
         <div class="Rating">
-            <div>Rating</div>
+            <div>Rating : 5.0</div>
         </div>
-        <div class="Umur">
-            <div>Umur</div>
+        <div class="Deskripsi">
+            <div>Deskripsi : <%= movie.getDescription()  %></div>
         </div>
         <div class="Review">
             <div>Review</div>

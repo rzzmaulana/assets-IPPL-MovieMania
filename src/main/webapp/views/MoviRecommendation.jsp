@@ -4,6 +4,9 @@
     Author     : acer
 --%>
 
+<%@page import="model.User"%>
+<%@page import="model.Movie"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -95,6 +98,7 @@ main {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 15px;
+    margin: 20px;
 }
 
 .movie-card {
@@ -121,9 +125,30 @@ main {
     font-size: 0.9em;
 }
 
+a{
+    text-decoration: none;
+    color:white;
+}
+
     </style>
     
 </head>
+
+<%
+    List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
+    User user=(User) request.getSession().getAttribute("user");
+    if (movies != null ) {
+        // Use movies list here
+    } else {
+        out.println("No movies found in session.");
+    }
+    if (user != null ) {
+        // Use movies list here
+    } else {
+        out.println("No user found in session.");
+    }
+%>
+
 <body>
     <header>
         <nav>
@@ -139,29 +164,29 @@ main {
     </header>
 
     <main>
-        <section class="movie-section">
-            <h2>Top IMDB</h2>
-            <div class="movie-grid">
-                <div class="movie-card">
-                    <div class="movie-thumbnail"></div>
-                    <p class="movie-title">Judul film</p>
-                </div>
-                <!-- Repeat the movie card as needed -->
-            </div>
-        </section>
-
-        <section class="movie-section">
-            <h2>Most Watched</h2>
-            <div class="movie-grid">
-                <div class="movie-card">
-                    <div class="movie-thumbnail"></div>
-                    <p class="movie-title">Judul film</p>
-                </div>
-                <!-- Repeat the movie card as needed -->
-            </div>
-        </section>
+       <section class="movie-section">
+    <div class="movie-grid">
+        <% if (movies != null) { %>
+            <% for (Movie movie : movies) { %>
+           
+                <a href="/Movie?action=DisplayFilm&movieID=<%= movie.getMovieID() %>" class="movie-card-link">
+                    <div class="movie-card">
+                        <div class="movie-thumbnail">
+                            <!-- Display the poster image -->
+                            <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+                        </div>
+                        <p class="movie-title"><%= movie.getTitle() %></p>
+                        <p class="movie-title"><%= movie.getGenre() %></p>
+                         <p class="movie-title"><%= movie.getReleaseDate() %></p>
+                        <!-- Add other movie details if needed -->
+                    </div>
+                </a>
+            <% } %>
+        <% } else { %>
+            <p>No movies available to display.</p>
+        <% } %>
+    </div>
+</section>
     </main>
 </body>
 </html>
-
-

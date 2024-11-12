@@ -201,7 +201,7 @@
             <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='HapusFilm.jsp'">
                 Delete movie
             </button>
-            <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='editFilmInput.jsp'">
+            <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='/Movie?action=editMovie'">
                 Edit movies
             </button>
         </div>

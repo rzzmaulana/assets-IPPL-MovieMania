@@ -75,12 +75,13 @@ public class MovieDao {
     }
 
     // Method to delete a movie by ID
-    public boolean deleteMovie(int movieID) throws SQLException {
-        String sql = "DELETE FROM movies WHERE movieID = ?";
+    public boolean deleteMovie(String title,String genre) throws SQLException {
+        String sql = "DELETE FROM movies WHERE title=? and genre=?";
         try (Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, movieID);
+            stmt.setString(1, title);
+            stmt.setString(2, genre);
 
             return stmt.executeUpdate() > 0; // Returns true if deletion was successful
         }
@@ -96,11 +97,15 @@ public class MovieDao {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+                
                 String title = rs.getString("title");
+                String genre=rs.getString("genre");
                 String description = rs.getString("description");
                 String posterUrl = rs.getString("poster_url");
+                Date releaseDate=rs.getDate("releaseDate");
+                String rating=rs.getString("rating");
 
-               // return new Movie(movieID, title, description, posterUrl);
+                return new Movie(movieID, title, genre, releaseDate, description, posterUrl);
             }
         }
         return null; // Returns null if no movie is found with the given ID

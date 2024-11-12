@@ -37,24 +37,63 @@ public class MovieController  extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Movie> movies = movieDao.getAllMovies();
-            request.setAttribute("movies", movies);
-            request.getRequestDispatcher("/movieList.jsp").forward(request, response);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.getWriter().println("Error: " + e.getMessage());
+            List<Movie>movies=movieDao.getAllMovies();
+            request.getSession().setAttribute("movies", movies);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        String action = request.getParameter("action");
+       
+        int movieID = 0;
+        Movie movie=null;
+          
+          String movieIDParam = request.getParameter("movieID");
+        
+
+       if (movieIDParam != null) {
+        try {
+            movieID = Integer.parseInt(movieIDParam);
+        } catch (NumberFormatException e) {
+            response.getWriter().println("Invalid movie ID format.");
+        }
+        } else {
+            response.getWriter().println("No movie ID provided.");
+        }  
+        try {
+            movie=movieDao.getMovieById(movieID);
+        } catch (SQLException ex) {
+            Logger.getLogger(MovieController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        request.getSession().setAttribute("SingleMovie", movie);
+    if ("DisplayFilm".equals(action)) {
+        
+       // response.getWriter().print("apake");
+        response.sendRedirect("/views/PageFilm.jsp");
+        
+    }else if(("editMovie").equals(action)){
+             response.sendRedirect("/views/HomeAdmin.jsp");
+    }else if(("DisplayFilmAdmin").equals(action)){
+           response.sendRedirect("/views/PageFilmAdmin.jsp");
+    }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
+        try {
+            List<Movie>movies=movieDao.getAllMovies();
+            request.getSession().setAttribute("movies", movies);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if ("addMovie".equals(action)) {
             AddMovie(request, response);
-        } else if ("signin".equals(action)) {
-            
-        } else {
+        } else if ("deleteMovie".equals(action)) {
+            deleteMovie(request,response);
+        }else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
         }
     }
@@ -108,18 +147,43 @@ public class MovieController  extends HttpServlet{
         }
     }
     
-    
-    
-
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int movieID = Integer.parseInt(request.getParameter("movieID"));
+    protected void deleteMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String title = request.getParameter("title");
+        
+        String genre=request.getParameter("genre");
+        boolean deleted=false;
+       
         try {
-            boolean deleted = movieDao.deleteMovie(movieID);
-            response.getWriter().println(deleted ? "Movie deleted successfully" : "Failed to delete movie");
+            deleted = movieDao.deleteMovie(title,genre);
+            
         } catch (SQLException e) {
             e.printStackTrace();
-            response.getWriter().println("Error: " + e.getMessage());
+            
+        }
+        
+        if(deleted){
+             response.sendRedirect("/views/Admin.jsp");
         }
     }
+    
+    protected void editMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String title = request.getParameter("title");
+        String genre=request.getParameter("genre");
+        boolean deleted=false;
+       
+        try {
+            deleted = movieDao.deleteMovie(title,genre);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            
+        }
+        
+        if(deleted){
+             response.sendRedirect("/views/Admin.jsp");
+        }
+    }
+    
+
+    
 }
