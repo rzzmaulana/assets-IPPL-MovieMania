@@ -191,15 +191,7 @@
     </style>
   </head>
   <body>
-       <%
-    User user = (User) session.getAttribute("user"); // Cast the object to User type
-
-    if (user != null) {
-        
-    } else {
-        out.print("User not found in session. Please log in again.");
-    }
-%>
+       
 
     <div class="admin-panel">
       <span class="icon-handwave">👋 Welcome To Movie Mania!</span>
@@ -207,10 +199,10 @@
       <p>What would you like to do?</p>
 
       <div class="d-flex justify-content-center gap-3">
-        <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='PageFilm.jsp'">
+        <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='/User?action=search'">
           Search Movies
         </button>
-        <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='HapusFilm.jsp'">
+        <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='/User?action=recommendation'">
           Movies Recommendation
         </button>
         

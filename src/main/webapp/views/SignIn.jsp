@@ -19,11 +19,10 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: white;
+       background-image: url("image/bgAdd.jpeg");
       margin: 0;
       font-family: "Poppins", sans-serif;
     }
-
     .signup-container {
       border-radius: 30px;
       padding: 40px;
@@ -31,7 +30,7 @@
       text-align: center;
       width: 400px;
       height: 400px;
-      background-image: url("image/bgSignUP.jpeg");
+      background: white;
     }
 
     .signup-container h2 {
@@ -133,8 +132,15 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+      
+    
+
     <div class="signup-container">
       <h2>SIGN IN</h2>
+     
+     
+
+
       <form action="/User" method="post">
        <input type="hidden" name="action" value="signin">
       <div class="input-group mb-3">

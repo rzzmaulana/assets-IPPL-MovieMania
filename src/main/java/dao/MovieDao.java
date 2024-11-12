@@ -30,7 +30,7 @@ public class MovieDao {
 
     // Method to add a new movie
     public boolean addMovie(String title,String genre,java.util.Date releaseDate,String description,String rating, String posterUrl) throws SQLException {
-        String sql = "INSERT INTO movies (title, genre , releaseDate ,rating,description ,poster_url) VALUES (?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO movies (title, genre , releaseDate ,description ,poster_url) VALUES (?, ?,?, ?,?)";
          try {
     Class.forName("com.mysql.cj.jdbc.Driver");
 } catch (ClassNotFoundException e) {
@@ -45,9 +45,9 @@ public class MovieDao {
             stmt.setString(2, genre);
             java.sql.Date releaseDateSql = new java.sql.Date(releaseDate.getTime()); // Convert to java.sql.Date
             stmt.setDate(3, releaseDateSql);
-            stmt.setString(4, rating);
-            stmt.setString(5, description);
-            stmt.setString(6, posterUrl);
+           
+            stmt.setString(4, description);
+            stmt.setString(5, posterUrl);
             
             
 
@@ -117,10 +117,13 @@ public class MovieDao {
             while (rs.next()) {
                 int movieID = rs.getInt("movieID");
                 String title = rs.getString("title");
+                String genre=rs.getString("genre");
                 String description = rs.getString("description");
                 String posterUrl = rs.getString("poster_url");
+                Date releaseDate=rs.getDate("releaseDate");
+                String rating=rs.getString("rating");
 
-                //movies.add(new Movie(movieID, title, description, posterUrl));
+                movies.add(new Movie(movieID, title, genre, releaseDate, description, posterUrl));
                 
             }
         }

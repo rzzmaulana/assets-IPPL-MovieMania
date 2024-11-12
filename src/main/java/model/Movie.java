@@ -53,7 +53,7 @@ public class Movie {
     }
 
     public float getRating() {
-        return calculateRating();
+        return this.rating;
     }
 
     public String getPosterUrl() {

@@ -3,16 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controller;
+import dao.MovieDao;
 import dao.UserDao;
 import model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Movie;
 import model.Sign;
 
 /**
@@ -22,10 +27,12 @@ import model.Sign;
 @WebServlet(name = "UserController", urlPatterns = {"/User"})
 public class UserController extends HttpServlet implements Sign{
     private UserDao userDao;
+    private MovieDao movieDao;
 
     
     public UserController(){
         userDao=new UserDao();
+        movieDao=new MovieDao();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -40,8 +47,30 @@ public class UserController extends HttpServlet implements Sign{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        String name = request.getParameter("username");
-        response.getWriter().print(name);
+        String action = request.getParameter("action");
+        
+        try {
+            List<Movie>movies=movieDao.getAllMovies();
+            request.getSession().setAttribute("movies", movies);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+           
+            
+     
+
+    if ("search".equals(action)) {
+       
+        response.getWriter().print("search");
+        response.sendRedirect("/views/HomeUser.jsp");
+        
+    } else if ("recommendation".equals(action)) {
+        // Code for recommendation action
+        response.getWriter().print("recommendation");
+        
+    }
     }
 
     @Override
@@ -76,7 +105,7 @@ public class UserController extends HttpServlet implements Sign{
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        
         boolean validateUser=userDao.validateUser(username, password);
         boolean validateAdmin=userDao.validateAdmin(username, password);
         if (validateUser) {

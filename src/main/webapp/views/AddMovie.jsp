@@ -107,11 +107,7 @@
                 <label for="genre">Genre</label>
             </div>
 
-            <!-- Rating -->
-            <div class="form-floating mb-3 rounded-4">
-                <input type="text" class="form-control rounded-4" id="rating" name="rating" placeholder="Rating" />
-                <label for="rating">Rating</label>
-            </div>
+            
 
             <!-- Description -->
             <div class="form-floating mb-3 rounded-4">
