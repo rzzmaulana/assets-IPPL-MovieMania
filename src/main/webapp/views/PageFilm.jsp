@@ -4,6 +4,7 @@
     Author     : acer
 --%>
 
+<%@page import="model.User"%>
 <%@page import="model.Movie"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -103,29 +104,33 @@
       <%-- Display the action parameter value here --%>
       <%
        Movie movie=(Movie) request.getSession().getAttribute("SingleMovie");
+       User user=(User) request.getSession().getAttribute("user");
+       
 %>
       
     <div class="container">
-      <div class="movie-title"> <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" /></div>
-      <div class="Info">
+    <div class="movie-title">
+        <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+    </div>
+    <div class="Info">
         <div class="Judul">
             <div>Title : <%= movie.getTitle() %></div>
         </div>
         <div class="Genre">
-            <div>Genre : <%= movie.getGenre()  %></div>
+            <div>Genre : <%= movie.getGenre() %></div>
         </div>
         <div class="Rating">
             <div>Rating : 5.0</div>
         </div>
         <div class="Deskripsi">
-            <div>Deskripsi : <%= movie.getDescription()  %></div>
+            <div>Deskripsi : <%= movie.getDescription() %></div>
         </div>
         <div class="Review">
-            <div>Review</div>
-          </div>
+            <a href="ReviewFilm.jsp?movieID=<%= movie.getMovieID() %>" class="btn btn-primary">Review</a>
         </div>
-      </div>
     </div>
+</div>
+
 
     <!-- Bootstrap JS (optional) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

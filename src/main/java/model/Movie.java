@@ -64,9 +64,9 @@ public class Movie {
         return reviews;
     }
 
-    public void addReview(Reviews review) {
-        reviews.add(review);
-        System.out.println("Review added with rating: " + review.getRating());
+    public void setReview(List<Reviews> review) {
+        reviews=review;
+        
     }
 
     public float calculateRating() {

@@ -4,6 +4,7 @@
  */
 package controller;
 import dao.MovieDao;
+import dao.UserDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -23,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Reviews;
+import model.User;
 
 /**
  *
@@ -32,6 +35,8 @@ import java.util.logging.Logger;
 @MultipartConfig 
 public class MovieController  extends HttpServlet{
     private final MovieDao movieDao = new MovieDao();
+    private final ReviewDao ReviewDao = new ReviewDao();
+    private final UserDao userDao = new UserDao();
     private final String uploadDirectory = "C:/uploaded_images"; // Change to your preferred upload directory
 
     @Override
@@ -45,8 +50,12 @@ public class MovieController  extends HttpServlet{
         }
         
         String action = request.getParameter("action");
+        List<User> listUser=userDao.getAllUsers();
         Movie movie=displayMovie(request,response);
+        movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
         request.getSession().setAttribute("SingleMovie", movie);
+        request.getSession().setAttribute("listUser", listUser);
+        
         
         
     if ("DisplayFilm".equals(action)) {
@@ -89,8 +98,10 @@ public class MovieController  extends HttpServlet{
             deleteMovie(request,response);
         }else if("EditMovie".equals(action)){
             editMovie(request,response);
+        }else if("addReview".equals(action)){
+            AddReview(request,response);
         }else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+          response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
         }
     }
     
@@ -252,6 +263,33 @@ public class MovieController  extends HttpServlet{
         return filteredMovies; 
        
     }
+    
+    protected void AddReview(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String movieIDParam = request.getParameter("movieID");
+        String UserIDParam = request.getParameter("userID");
+        int movieID = Integer.parseInt(movieIDParam);
+        int userID = Integer.parseInt(UserIDParam);
+        float rating = Float.parseFloat(request.getParameter("rating"));
+        String comment = request.getParameter("comment");
+        List<Reviews>reviews=ReviewDao.getReviewsByMovieID(movieID);
+        request.getSession().setAttribute("reviews", reviews);
+        boolean reviewed=ReviewDao.addReview(movieID, userID, rating, comment);
+        
+         if(reviewed){
+             
+             response.sendRedirect("/views/HomeUser.jsp");
+         }else{
+             response.getWriter().println("Cant add review");
+         }
+        
+        
+
+        
+       
+       
+    }
+    
+    
     
     
     

@@ -69,7 +69,7 @@ public class UserDao {
     // Method to get a list of all users
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String query = "SELECT username,password FROM users";
+        String query = "SELECT * FROM users";
 
         try {
     Class.forName("com.mysql.cj.jdbc.Driver");
@@ -81,9 +81,11 @@ public class UserDao {
              ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
+                int userID=resultSet.getInt("UserID");
                 String username = resultSet.getString("username");
                 String password= resultSet.getString("password");
                 User user = new User(username,password);
+                user.setID(userID);
                 users.add(user); // Add each username to the list
             }
 

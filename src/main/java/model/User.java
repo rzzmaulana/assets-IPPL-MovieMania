@@ -16,6 +16,7 @@ public class User {
     protected String username;
     protected String password;
     protected String fullname;
+    protected List<Reviews>review;
     final protected boolean isAdmin=false;
       // Aggregation relationship with Review
 
@@ -50,6 +51,11 @@ public class User {
     public String getPassword() {
         return password;
     }
+    
+    public List<Reviews> getReviews() {
+        return review;
+    }
+    
     public void setPassword(String password) {
         this.password = password;
     }
@@ -85,5 +91,9 @@ public class User {
 
     public void editReview(Movie movie, Reviews review) {
         
+    }
+
+    public int getUserID() {
+        return userID;
     }
 }
