@@ -60,15 +60,18 @@ public class MovieDao {
     
     
     // Method to update an existing movie
-    public boolean updateMovie(int movieID, String title, String description, String posterUrl) throws SQLException {
-        String sql = "UPDATE movies SET title = ?, description = ?, poster_url = ? WHERE movieID = ?";
+    public boolean updateMovie(int movieID,String title ,String genre,java.util.Date ReleaseDate ,String description, String posterUrl) throws SQLException {
+        String sql = "UPDATE movies SET title = ?,genre=?,description = ?,releaseDate=? ,poster_url = ? WHERE movieID = ?";
         try (Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, title);
-            stmt.setString(2, description);
-            stmt.setString(3, posterUrl);
-            stmt.setInt(4, movieID);
+            stmt.setString(2, genre);
+            stmt.setString(3, description);
+            java.sql.Date releaseDateSql = new java.sql.Date(ReleaseDate.getTime());
+            stmt.setDate(4, releaseDateSql);
+            stmt.setString(5, posterUrl);
+            stmt.setInt(6, movieID);
 
             return stmt.executeUpdate() > 0; // Returns true if update was successful
         }

@@ -84,7 +84,7 @@
         margin-top: 30px;
       }
 
-      .Judul , .Genre, .Rating, .Deskripsi,.Review{
+      .Judul , .Genre, .ReleaseDate, .Deskripsi,.Review{
         background-color: none;
         border-radius: 10px;
         padding: 15px;
@@ -133,33 +133,27 @@
     <div class="container">
       <div class="movie-title"> <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" /></div>
       <div class="Info">
-        <form action="/saveMovieDetails" method="POST"/>
         <div class="Judul">
-            
-            <label for="title">Title: <%= movie.getTitle() %></label>
-            <input type="text" id="title" name="title" />
+            <div>Title : <%= movie.getTitle() %></div>
         </div>
         <div class="Genre">
-            <label for="title">Title: <%= movie.getTitle() %></label>
-            <input type="text" id="title" name="title" />
+            <div>Genre : <%= movie.getGenre()  %></div>
         </div>
-        <div class="Rating">
-            <label for="title">Title: <%= movie.getTitle() %></label>
-            <input type="text" id="title" name="title" />
+        <div class="ReleaseDate">
+            <div>Release Data: <%= movie.getReleaseDate()  %></div>
         </div>
         <div class="Deskripsi">
-            <label for="title">Title: <%= movie.getTitle() %></label>
-            <input type="text" id="title" name="title" />
+            <div>Deskripsi : <%= movie.getDescription()  %></div>
         </div>
-        
+        <div class="Review">
+            <div>Review</div>
+          </div>
         </div>
       <div class="button-group">
             <button class="edit-btn" onclick="window.location.href='/Movie?action=editMovie'>Edit</button>
             
-       </div>
-       </form>
+        </div>
       </div>
-      
     </div>
 
     <!-- Bootstrap JS (optional) -->

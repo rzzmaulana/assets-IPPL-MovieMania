@@ -11,7 +11,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie Data Form</title>
+    <title>Edit Movie Data</title>
     <!-- Bootstrap 5 CDN -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
@@ -20,31 +20,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <style>
-      /* body {
-        
-        
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: "Poppins";
-        background-color: #6c5ce7;
-        
-        
-        
-      }*/
-
       body {
         width: 100%;
         height: 100vh;
-
-       
         font-family: "Poppins";
-        
         background-image: url("image/bgAdd.jpeg");
         background-size: cover;
         background-color: #6c5ce7;
@@ -58,20 +41,18 @@
         grid-template-areas: "movie review";
         grid-template-columns: 5fr 10fr;
         padding: 20px;
-
-        
         border-radius: 20px;
       }
 
       .movie-title {
-        flex: 1; /* Take minimal space, allowing the reviews section to grow */
+        flex: 1;
         background-color: rgba(240, 237, 255, 0.8);
         color: white;
         border-radius: 10px;
         padding: 20px;
         font-size: 24px;
-        margin-right: 50px; /* Adds space between the title and reviews */
-        text-align: left; /* Align text to the left */
+        margin-right: 50px;
+        text-align: left;
         grid-area: movie;
         margin-top: 30px;
       }
@@ -79,81 +60,127 @@
       .Info {
         display: flex;
         flex-direction: column;
-        gap: 70px;
+        gap: 20px;
         grid-area: review;
         margin-top: 30px;
       }
 
-      .Judul , .Genre, .Rating, .Deskripsi,.Review{
-        background-color: none;
+      .form-group {
+        background-color: rgba(255, 255, 255, 0.1);
         border-radius: 10px;
         padding: 15px;
-        display: flex;
-        align-items: center;
-        gap: 15px;
         color: white;
-        
-        border: none;
       }
-      
-      
-.edit-btn, .delete-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
 
-.edit-btn {
-    background-color: #4caf50;
-    color: white;
-}
+      .form-control {
+        background-color: transparent;
+        border: 1px solid #ccc;
+        color: white;
+      }
 
-.delete-btn {
-    background-color: #f44336;
-    color: white;
-}
+      .save-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        border: none;
+        background-color: #4caf50;
+        color: white;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
 
-.edit-btn:hover {
-    background-color: #45a049;
-}
-
-     
+      .save-btn:hover {
+        background-color: #45a049;
+      }
     </style>
   </head>
   <body>
-      <%-- Display the action parameter value here --%>
-      <%
-       Movie movie=(Movie) request.getSession().getAttribute("SingleMovie");
-%>
-      
+    <%-- Retrieve the Movie object from the session --%>
+    <%
+      Movie movie = (Movie) request.getSession().getAttribute("SingleMovie");
+      out.println(movie.getMovieID());
+      int movieID=movie.getMovieID();
+    %>
+
     <div class="container">
-      <div class="movie-title"> <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" /></div>
-      <div class="Info">
-        <div class="Judul">
-            <div>Title : <%= movie.getTitle() %></div>
-        </div>
-        <div class="Genre">
-            <div>Genre : <%= movie.getGenre()  %></div>
-        </div>
-        <div class="Rating">
-            <div>Rating : 5.0</div>
-        </div>
-        <div class="Deskripsi">
-            <div>Deskripsi : <%= movie.getDescription()  %></div>
-        </div>
-        <div class="Review">
-            <div>Review</div>
-          </div>
-        </div>
-      <div class="button-group">
-            <button class="edit-btn" onclick="window.location.href='/Movie?action=editMovie'>Edit</button>
-            
-        </div>
+      <div class="movie-title">
+        <img
+          src="<%= movie.getPosterUrl() %>"
+          alt="<%= movie.getTitle() %> Poster"
+          style="width: 100%; border-radius: 10px;"
+        />
+        
+        
+        
       </div>
+
+      <form class="Info" action="/Movie" method="POST" enctype="multipart/form-data">
+          
+       <input type="hidden" name="action" value="EditMovie">
+       <input type="hidden" name="movieID" value="<%= movie.getMovieID() %>">
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            class="form-control"
+            value="<%= movie.getTitle() %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="genre">Genre:</label>
+          <input
+            type="text"
+            id="genre"
+            name="genre"
+            class="form-control"
+            value="<%= movie.getGenre() %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="rating">Release Date</label>
+          <input
+            type="date"
+            id="rating"
+            name="date"
+            class="form-control"
+            value="<%= movie.getReleaseDate()%>"
+            step="0.1"
+            min="0"
+            max="10"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea
+            id="description"
+            name="description"
+            class="form-control"
+            rows="4"
+            required
+          ><%= movie.getDescription() %></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="review">Review:</label>
+          
+        </div>
+        <div class="form-group">
+          <label for="poster">Upload New Poster:</label>
+        <input type="file" id="poster" name="poster" class="form-control" accept="image/*" />
+          
+        </div>
+        
+        <button type="submit" class="save-btn">Save Changes</button>
+      </form>
     </div>
 
     <!-- Bootstrap JS (optional) -->

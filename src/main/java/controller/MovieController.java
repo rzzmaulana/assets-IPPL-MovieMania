@@ -45,28 +45,10 @@ public class MovieController  extends HttpServlet{
         }
         
         String action = request.getParameter("action");
-       
-        int movieID = 0;
-        Movie movie=null;
-          
-          String movieIDParam = request.getParameter("movieID");
-        
-
-       if (movieIDParam != null) {
-        try {
-            movieID = Integer.parseInt(movieIDParam);
-        } catch (NumberFormatException e) {
-            response.getWriter().println("Invalid movie ID format.");
-        }
-        } else {
-            response.getWriter().println("No movie ID provided.");
-        }  
-        try {
-            movie=movieDao.getMovieById(movieID);
-        } catch (SQLException ex) {
-            Logger.getLogger(MovieController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Movie movie=displayMovie(request,response);
         request.getSession().setAttribute("SingleMovie", movie);
+        
+        
     if ("DisplayFilm".equals(action)) {
         
        // response.getWriter().print("apake");
@@ -75,7 +57,9 @@ public class MovieController  extends HttpServlet{
     }else if(("editMovie").equals(action)){
              response.sendRedirect("/views/HomeAdmin.jsp");
     }else if(("DisplayFilmAdmin").equals(action)){
-           response.sendRedirect("/views/PageFilmAdmin.jsp");
+          
+        
+        response.sendRedirect("/views/PageFilmAdmin.jsp");
     }
     }
 
@@ -93,6 +77,8 @@ public class MovieController  extends HttpServlet{
             AddMovie(request, response);
         } else if ("deleteMovie".equals(action)) {
             deleteMovie(request,response);
+        }else if("EditMovie".equals(action)){
+            editMovie(request,response);
         }else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
         }
@@ -169,20 +155,86 @@ public class MovieController  extends HttpServlet{
     protected void editMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String title = request.getParameter("title");
         String genre=request.getParameter("genre");
-        boolean deleted=false;
+        String desctiption=request.getParameter("description");
+        String dateString = request.getParameter("date");
+        String movieIDParam = request.getParameter("movieID");
+        
+        int movieID=0;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // Match HTML date format
+        Date releaseDate = null;
+        try {
+            releaseDate = formatter.parse(dateString);
+        } catch (ParseException ex) {
+            Logger.getLogger(MovieController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (movieIDParam != null) {
+        try {
+            movieID = Integer.parseInt(movieIDParam);
+        } catch (NumberFormatException e) {
+            response.getWriter().println("Invalid movie ID format.");
+        }
+        } else {
+            response.getWriter().println("No movie ID provided.");
+        }
+
+        // Handle the uploaded poster image
+        Part filePart = request.getPart("poster");
+        String fileName = filePart.getSubmittedFileName();
+        String filePath = uploadDirectory + File.separator + fileName;
+
+        // Save the file to the server
+        File fileSaveDir = new File(uploadDirectory);
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdirs(); // Create the directory if it does not exist
+        }
+        filePart.write(filePath);
+        
+        // Relative path to store in the database
+        String relativePath = "uploaded_images/" + fileName;
+        
+
+        boolean movieEdited=false;
        
         try {
-            deleted = movieDao.deleteMovie(title,genre);
+          movieEdited=movieDao.updateMovie(movieID, title, genre,releaseDate, desctiption, relativePath);
             
         } catch (SQLException e) {
             e.printStackTrace();
             
         }
         
-        if(deleted){
+        if(movieEdited){
              response.sendRedirect("/views/Admin.jsp");
         }
     }
+    
+    protected Movie displayMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int movieID = 0;
+        Movie movie=null;
+          
+          String movieIDParam = request.getParameter("movieID");
+        
+
+       if (movieIDParam != null) {
+        try {
+            movieID = Integer.parseInt(movieIDParam);
+        } catch (NumberFormatException e) {
+            response.getWriter().println("Invalid movie ID format.");
+        }
+        } else {
+            response.getWriter().println("No movie ID provided.");
+        }  
+        try {
+            movie=movieDao.getMovieById(movieID);
+        } catch (SQLException ex) {
+            Logger.getLogger(MovieController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return movie;
+    }
+    
+    
     
 
     
