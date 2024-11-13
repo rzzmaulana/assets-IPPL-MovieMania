@@ -50,24 +50,36 @@ public class MovieController  extends HttpServlet{
         }
         
         String action = request.getParameter("action");
-        List<User> listUser=userDao.getAllUsers();
-        Movie movie=displayMovie(request,response);
-        movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
-        request.getSession().setAttribute("SingleMovie", movie);
-        request.getSession().setAttribute("listUser", listUser);
+        
         
         
         
     if ("DisplayFilm".equals(action)) {
+        List<User> listUser=userDao.getAllUsers();
+        Movie movie=displayMovie(request,response);
+        movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
         
+        request.getSession().setAttribute("SingleMovie", movie);
+        request.getSession().setAttribute("listUser", listUser);
        // response.getWriter().print("apake");
         response.sendRedirect("/views/PageFilm.jsp");
         
     }else if(("editMovie").equals(action)){
+        List<User> listUser=userDao.getAllUsers();
+        Movie movie=displayMovie(request,response);
+        movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
+        
+        request.getSession().setAttribute("SingleMovie", movie);
+        request.getSession().setAttribute("listUser", listUser);
              response.sendRedirect("/views/HomeAdmin.jsp");
     }else if(("DisplayFilmAdmin").equals(action)){
           
+        List<User> listUser=userDao.getAllUsers();
+        Movie movie=displayMovie(request,response);
+        movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
         
+        request.getSession().setAttribute("SingleMovie", movie);
+        request.getSession().setAttribute("listUser", listUser);
         response.sendRedirect("/views/PageFilmAdmin.jsp");
     }else if("searchMovie".equals(action)){
         List<Movie> filteredMovies = searchMovie(request,response);

@@ -120,7 +120,7 @@
             <div>Genre : <%= movie.getGenre() %></div>
         </div>
         <div class="Rating">
-            <div>Rating : 5.0</div>
+            <div>Rating : <%= movie.getRating() %></div>
         </div>
         <div class="Deskripsi">
             <div>Deskripsi : <%= movie.getDescription() %></div>

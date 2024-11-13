@@ -4,6 +4,7 @@
     Author     : acer
 --%>
 
+<%@page import="java.util.ArrayList"%>
 <%@page import="model.User"%>
 <%@page import="model.Movie"%>
 <%@page import="java.util.List"%>
@@ -49,11 +50,13 @@ nav {
     color: white;
 }
 
-.nav-left a {
+.nav-left  a{
     margin-right: 15px;
+    margin-top: 15px;
     text-decoration: none;
     color: white;
     font-weight: bold;
+    
 }
 
 .nav-right {
@@ -133,13 +136,26 @@ a{
     </style>
     
 </head>
-
+<%
+                     List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
+                     List<Movie>filteredMovies=(List<Movie>) request.getSession().getAttribute("FilteredMovies");
+                     User user=(User) request.getSession().getAttribute("user");
+                    // Check if filteredMovies is available, otherwise use movies
+                    List<Movie> displayMovies = new ArrayList<>();
+                    if(filteredMovies!=null){
+                       displayMovies=filteredMovies;
+                    }else{
+                       displayMovies=movies;
+                    }
+ %>
 <body>
     <header>
         <nav>
             <div class="nav-left">
-                <a href="#">Home</a>
+                <p>Hi <%= user.getUsername()%> 👋 Mau nonton apa hari ini! </p>
+                <a href="\views\HomeUser.jsp">Home</a>
                 <a href="#">Recommend Movies</a>
+                <a href="\">Back</a>
             </div>
             <div class="nav-right">
                 <form action="/Movie" method="get">
@@ -154,31 +170,34 @@ a{
     <main>
         <section class="movie-section">
             <div class="movie-grid">
-                <%
-                     List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
-                     List<Movie>filteredMovies=(List<Movie>) request.getSession().getAttribute("FilteredMovies");
-                     User user=(User) request.getSession().getAttribute("user");
-                    // Check if filteredMovies is available, otherwise use movies
-                    List<Movie> displayMovies = (filteredMovies != null) ? filteredMovies : movies;
-                %>
                 
-                <% if (displayMovies != null && !displayMovies.isEmpty()) { %>
-                    <% for (Movie movie : displayMovies) { %>
-                        <a href="/Movie?action=DisplayFilm&movieID=<%= movie.getMovieID() %>" class="movie-card-link">
-                            <div class="movie-card">
-                                <div class="movie-thumbnail">
-                                    <!-- Display the poster image -->
-                                    <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
-                                </div>
-                                <p class="movie-title"><%= movie.getTitle() %></p>
-                                <p class="movie-title"><%= movie.getGenre() %></p>
-                                <p class="movie-title"><%= movie.getReleaseDate() %></p>
-                            </div>
-                        </a>
-                    <% } %>
-                <% } else { %>
-                    <p>No movies available to display.</p>
-                <% } %>
+                
+                <% if (!displayMovies.isEmpty()) { %>
+    <% for (Movie movie : displayMovies) { %>
+        <a href="/Movie?action=DisplayFilm&movieID=<%= movie.getMovieID() %>" class="movie-card-link">
+            <div class="movie-card">
+                <div class="movie-thumbnail">
+                    <!-- Display the poster image -->
+                    <%  
+                        for(Movie film : movies) {
+                            if(film.getMovieID() == movie.getMovieID()) {    
+                                String newTitle = film.getTitle();
+                                movie.setTitle(newTitle);
+                            }
+                        }
+                    %>
+                    <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+                </div>
+                <p class="movie-title"><%= movie.getTitle() %></p>
+                <p class="movie-title"><%= movie.getGenre() %></p>
+                <p class="movie-title"><%= movie.getReleaseDate() %></p>
+            </div>
+        </a>
+    <% } %>
+<% } else { %>
+    <p>No movies available to display.</p>
+<% } %>
+
             </div>
         </section>
     </main>

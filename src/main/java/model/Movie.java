@@ -53,7 +53,7 @@ public class Movie {
     }
 
     public float getRating() {
-        return this.rating;
+        return calculateRating();
     }
 
     public String getPosterUrl() {
@@ -66,6 +66,11 @@ public class Movie {
 
     public void setReview(List<Reviews> review) {
         reviews=review;
+        
+    }
+    
+    public void setTitle(String title) {
+        this.title=title;
         
     }
 
