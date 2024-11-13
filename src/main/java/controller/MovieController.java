@@ -60,6 +60,16 @@ public class MovieController  extends HttpServlet{
           
         
         response.sendRedirect("/views/PageFilmAdmin.jsp");
+    }else if("searchMovie".equals(action)){
+        List<Movie> filteredMovies = searchMovie(request,response);
+        request.getSession().setAttribute("FilteredMovies", filteredMovies);
+        
+        response.sendRedirect("/views/HomeUser.jsp");
+    }else if("searchMovieAdmin".equals(action)){
+        List<Movie> filteredMovies = searchMovie(request,response);
+        request.getSession().setAttribute("FilteredMovies", filteredMovies);
+        
+        response.sendRedirect("/views/HomeAdmin.jsp");
     }
     }
 
@@ -232,6 +242,15 @@ public class MovieController  extends HttpServlet{
         }
         
         return movie;
+    }
+    
+    protected List<Movie> searchMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String query = request.getParameter("query");
+        
+        List<Movie> filteredMovies = movieDao.searchMoviesByTitle(query);
+        
+        return filteredMovies; 
+       
     }
     
     

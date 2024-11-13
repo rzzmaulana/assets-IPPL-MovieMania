@@ -61,9 +61,9 @@ public class UserController extends HttpServlet implements Sign{
             
      
 
-    if ("search".equals(action)) {
+    if ("display".equals(action)) {
        
-        response.getWriter().print("search");
+        
         response.sendRedirect("/views/HomeUser.jsp");
         
     } else if ("recommendation".equals(action)) {

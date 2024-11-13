@@ -137,5 +137,41 @@ public class MovieDao {
         }
         return movies;
     }
+    
+    public List<Movie> searchMoviesByTitle(String title) {
+    List<Movie> movies = new ArrayList<>();
+    String sql = "SELECT * FROM movies WHERE title LIKE ?";
+
+    try (Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setString(1, "%" + title + "%"); // Use % for partial matching
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            int movieID = rs.getInt("movieID");
+                
+                String genre=rs.getString("genre");
+                String description = rs.getString("description");
+                String posterUrl = rs.getString("poster_url");
+                Date releaseDate=rs.getDate("releaseDate");
+                
+
+                movies.add(new Movie(movieID, title, genre, releaseDate, description, posterUrl));
+            
+            
+            
+       }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+      
+      if(title.isEmpty()){
+          return null;
+      }
+
+     return movies;
+    }
+
 
 }

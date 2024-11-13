@@ -134,21 +134,6 @@ a{
     
 </head>
 
-<%
-    List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
-    User user=(User) request.getSession().getAttribute("user");
-    if (movies != null ) {
-        // Use movies list here
-    } else {
-        out.println("No movies found in session.");
-    }
-    if (user != null ) {
-        // Use movies list here
-    } else {
-        out.println("No user found in session.");
-    }
-%>
-
 <body>
     <header>
         <nav>
@@ -157,37 +142,45 @@ a{
                 <a href="#">Recommend Movies</a>
             </div>
             <div class="nav-right">
-                <input type="text" placeholder="Search...">
-                <button class="search-btn">🔍</button>
+                <form action="/Movie" method="get">
+                    <input type="hidden" name="action" value="searchMovie">
+                    <input type="text" name="query" placeholder="Search...">
+                    <button type="submit" class="search-btn">🔍</button>
+                </form>
             </div>
         </nav>
     </header>
 
     <main>
-       <section class="movie-section">
-    <div class="movie-grid">
-        <% if (movies != null) { %>
-            <% for (Movie movie : movies) { %>
-           
-                <a href="/Movie?action=DisplayFilm&movieID=<%= movie.getMovieID() %>" class="movie-card-link">
-                    <div class="movie-card">
-                        <div class="movie-thumbnail">
-                            <!-- Display the poster image -->
-                            <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
-                        </div>
-                        <p class="movie-title"><%= movie.getTitle() %></p>
-                        <p class="movie-title"><%= movie.getGenre() %></p>
-                         <p class="movie-title"><%= movie.getReleaseDate() %></p>
-                        <!-- Add other movie details if needed -->
-                    </div>
-                </a>
-            <% } %>
-        <% } else { %>
-            <p>No movies available to display.</p>
-        <% } %>
-    </div>
-</section>
+        <section class="movie-section">
+            <div class="movie-grid">
+                <%
+                     List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
+                     List<Movie>filteredMovies=(List<Movie>) request.getSession().getAttribute("FilteredMovies");
+                     User user=(User) request.getSession().getAttribute("user");
+                    // Check if filteredMovies is available, otherwise use movies
+                    List<Movie> displayMovies = (filteredMovies != null) ? filteredMovies : movies;
+                %>
+                
+                <% if (displayMovies != null && !displayMovies.isEmpty()) { %>
+                    <% for (Movie movie : displayMovies) { %>
+                        <a href="/Movie?action=DisplayFilm&movieID=<%= movie.getMovieID() %>" class="movie-card-link">
+                            <div class="movie-card">
+                                <div class="movie-thumbnail">
+                                    <!-- Display the poster image -->
+                                    <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+                                </div>
+                                <p class="movie-title"><%= movie.getTitle() %></p>
+                                <p class="movie-title"><%= movie.getGenre() %></p>
+                                <p class="movie-title"><%= movie.getReleaseDate() %></p>
+                            </div>
+                        </a>
+                    <% } %>
+                <% } else { %>
+                    <p>No movies available to display.</p>
+                <% } %>
+            </div>
+        </section>
     </main>
 </body>
 </html>
-

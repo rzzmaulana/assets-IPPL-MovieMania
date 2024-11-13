@@ -199,7 +199,7 @@
       <p>What would you like to do?</p>
 
       <div class="d-flex justify-content-center gap-3">
-        <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='/User?action=search'">
+        <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='/User?action=display'">
           Search Movies
         </button>
         <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='/User?action=recommendation'">
