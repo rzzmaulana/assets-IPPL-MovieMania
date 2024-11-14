@@ -22,7 +22,7 @@
             width: 100%;
             height: 100vh;
             border-radius: 53px;
-            background-image: url('/aset_movie/image/bgAdd.jpeg');
+            background-image: url('/image/bgAdd.jpeg');
             background-size: cover;
             display: flex;
             justify-content: center;
@@ -94,7 +94,7 @@
         <h2>MASUKAN DATA FILM</h2>
         <form action="/Movie" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="addMovie">
-
+           
             <!-- Judul -->
             <div class="form-floating mb-3 rounded-4">
                 <input type="text" class="form-control rounded-4" id="judul" name="judul" placeholder="Judul" />
@@ -126,7 +126,7 @@
                 <span class="input-text start">Upload Poster</span>
                 <input type="file" id="uploadPoster" name="poster" placeholder="Upload poster..." accept="image/*" required />
                 <label for="uploadPoster">
-                    <img src="/aset_movie/image/icon_upload.jpeg" style="width: 2rem; height: 2rem" />
+                    <img src="/image/upload.jpeg" style="width: 2rem; height: 2rem" />
                 </label>
             </div>
 

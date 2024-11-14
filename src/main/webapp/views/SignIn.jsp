@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page isELIgnored="false"%>
 <!DOCTYPE html>
 <html lang="en">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -132,8 +133,8 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-      
-    
+
+
 
     <div class="signup-container">
       <h2>SIGN IN</h2>
