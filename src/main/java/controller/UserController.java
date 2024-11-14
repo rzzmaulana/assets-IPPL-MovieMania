@@ -58,27 +58,33 @@ public class UserController extends HttpServlet implements Sign{
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
             
-           
-         try {
-                List<Integer>recommendID=getRecommendation(request,response);
-                request.getSession().setAttribute("recommendID", recommendID);
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+ 
             
      
 
     if ("display".equals(action)) {
-       
+      
+        
+       DisplayMovie(request,response);
         
         response.sendRedirect("/views/HomeUser.jsp");
         
     } else if ("recommendation".equals(action)) {
             
-       
+         if (!"yes".equals(request.getParameter("search"))) {
+           request.getSession().setAttribute("FilteredMovies", null);
+}
+         
+            try {
+                
+                 List<Movie> displayMovies=getRecommendation(request,response);
+                 
+                 request.getSession().setAttribute("displayMovie",displayMovies);
         
-        
-       response.sendRedirect("/views/MoviRecommendation.jsp");
+                 response.sendRedirect("/views/MoviRecommendation.jsp");
+            } catch (SQLException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
     }
     }
@@ -137,23 +143,73 @@ public class UserController extends HttpServlet implements Sign{
         } 
     }
     
-    protected List<Integer> getRecommendation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+    public void DisplayMovie(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        request.getSession().setAttribute("FilteredMovies", null);
+        
+        
+    }
+    
+    protected List<Movie> getRecommendation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         User user=(User)request.getSession().getAttribute("user");
         int userID=user.getUserID();
         
         List<String>genres=userDao.getHighlyRatedGenres(userID,7);
         List<Integer>recommendID=userDao.getRecommendedMoviesIDByGenres(genres);
         
+        List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
+        List<Movie>recommendMovies=new ArrayList<>();
+        List<Movie>filteredMovies=(List<Movie>) request.getSession().getAttribute("FilteredMovies");
+      
+        List<Movie> displayMovies = new ArrayList<>();
+              if(recommendID!=null){
+                          
+                      for(Movie filem:movies){
+                      
+                        for(Integer id:recommendID){
+                        
+                            if(id==filem.getMovieID())recommendMovies.add(filem);
+                        }
+                      
+                        
+                    }
+                    
+                    if(filteredMovies!=null){
+                          
+                         for(Movie recMovie:recommendMovies){
+                         
+                             for(Movie filtered:filteredMovies){
+                             
+                               if(filtered.getMovieID()==recMovie.getMovieID())displayMovies.add(filtered);
+                         
+                         }
+                   } 
+                    
+                    
+                    
+                       }else{
+                         displayMovies=recommendMovies;
+                      }
+    
+                  }else{
+                       if(filteredMovies!=null){
+                          displayMovies=filteredMovies;
+                       }else{
+                         displayMovies=movies;
+                      }
+                    }
+              
+            for (Movie movie : displayMovies) {   
+              for(Movie film : movies) {
+                     if(film.getMovieID() == movie.getMovieID()) {    
+                            String newTitle = film.getTitle();
+                            movie.setTitle(newTitle);
+                       }
+                  }
+              
+            }
         
-       
-      return recommendID;
-    
-    
-    
-    
-    
-    
-    
+       return displayMovies;
     
     }
 }

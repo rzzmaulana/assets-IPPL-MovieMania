@@ -95,7 +95,7 @@ public class MovieController  extends HttpServlet{
         List<Movie> filteredMovies = searchMovie(request,response);
         request.getSession().setAttribute("FilteredMovies", filteredMovies);
         
-        response.sendRedirect("/views/MoviRecommendation.jsp");
+        response.sendRedirect("/User?action=recommendation&search=yes");
     }
     }
 
@@ -279,6 +279,15 @@ public class MovieController  extends HttpServlet{
     protected List<Movie> searchMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String query = request.getParameter("query");
         
+        List<Movie> filteredMovies = movieDao.searchMoviesByTitle(query);
+        
+        return filteredMovies; 
+       
+    }
+    
+    protected List<Movie> searchMovieInRecommendation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String query = request.getParameter("query");
+       
         List<Movie> filteredMovies = movieDao.searchMoviesByTitle(query);
         
         return filteredMovies; 
