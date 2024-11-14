@@ -137,60 +137,19 @@ a{
     
 </head>
 <%
-                     List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
-                     List<Integer>recommendID=(List<Integer>)request.getSession().getAttribute("recommendID");
-                     List<Movie>recommendMovies=new ArrayList<>();
-                     List<Movie>filteredMovies=(List<Movie>) request.getSession().getAttribute("FilteredMovies");
-                     User user=(User) request.getSession().getAttribute("user");
                      
-                     
-                     
-                    // Check if filteredMovies is available, otherwise use movies
-                    List<Movie> displayMovies = new ArrayList<>();
-                    if(recommendID!=null){
-                          
-                      for(Movie filem:movies){
-                      
-                        for(Integer id:recommendID){
-                        
-                            if(id==filem.getMovieID())recommendMovies.add(filem);
-                        }
-                      
-                        
-                    }
+       User user=(User) request.getSession().getAttribute("user");
+       List<Movie>displayMovies=(List<Movie>) request.getSession().getAttribute("displayMovie");
+       
                     
-                    if(filteredMovies!=null){
-                          
-                         for(Movie recMovie:recommendMovies){
-                         
-                             for(Movie filtered:filteredMovies){
-                             
-                               if(filtered.getMovieID()==recMovie.getMovieID())displayMovies.add(filtered);
-                         
-                         }
-                   } 
-                    
-                    
-                    
-                       }else{
-                         displayMovies=recommendMovies;
-                      }
-    
-                  }else{
-                       if(filteredMovies!=null){
-                          displayMovies=filteredMovies;
-                       }else{
-                         displayMovies=movies;
-                      }
-                    }
  %>
 <body>
     <header>
         <nav>
             <div class="nav-left">
                 <p>Hi <%= user.getUsername()%> 👋 Mau nonton apa hari ini! </p>
-                <a href="\views\HomeUser.jsp">Home</a>
-                <a href="\views\MoviRecommendation.jsp">Recommend Movies</a>
+                <a href="/User?action=display">Home</a>
+                <a href="/User?action=recommendation">Recommend Movies</a>
                 <a href="\">Back</a>
             </div>
             <div class="nav-right">
@@ -214,14 +173,7 @@ a{
             <div class="movie-card">
                 <div class="movie-thumbnail">
                     <!-- Display the poster image -->
-                    <%  
-                        for(Movie film : movies) {
-                            if(film.getMovieID() == movie.getMovieID()) {    
-                                String newTitle = film.getTitle();
-                                movie.setTitle(newTitle);
-                            }
-                        }
-                    %>
+                    
                     <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
                 </div>
                 <p class="movie-title"><%= movie.getTitle() %></p>
