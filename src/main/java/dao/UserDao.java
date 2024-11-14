@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import model.User;
 
 /**
@@ -227,6 +228,59 @@ public class UserDao {
     }
 
     return userr; // Returns the User object if found, or null if not found
+}  
+    
+    public List<String> getHighlyRatedGenres(int userID, float ratingThreshold) throws SQLException {
+    String query = "SELECT DISTINCT m.genre FROM reviews r " +
+                   "JOIN movies m ON r.Movies_movieID = m.movieID " +
+                   "WHERE r.Users_UserID = ? AND r.rating > ?";
+    List<String> genres = new ArrayList<>();
+    
+    
+    
+    try (Connection conn = DriverManager.getConnection(url, user, pasword);
+         PreparedStatement statement = conn.prepareStatement(query)) {
+        
+        statement.setInt(1, userID);
+        statement.setFloat(2, ratingThreshold);
+        
+        ResultSet resultSet = statement.executeQuery();
+        
+        while (resultSet.next()) {
+            genres.add(resultSet.getString("genre"));
+        }
+    }
+    return genres;
+}
+
+    public List<Integer> getRecommendedMoviesIDByGenres(List<String> genres) throws SQLException {
+    if (genres.isEmpty()) {
+        return new ArrayList<>();
+    }
+
+    String query = "SELECT movieID FROM movies WHERE genre IN (" + 
+                   genres.stream().map(g -> "?").collect(Collectors.joining(",")) + ")";
+    
+    List<Integer> recommendedMoviesID = new ArrayList<>();
+    
+    try (Connection conn = DriverManager.getConnection(url, user, pasword);
+         PreparedStatement statement = conn.prepareStatement(query)) {
+        
+        int index = 1;
+        for (String genre : genres) {
+            statement.setString(index++, genre);
+        }
+        
+        ResultSet resultSet = statement.executeQuery();
+        
+        while (resultSet.next()) {
+           
+            int movieID=(resultSet.getInt("movieID"));
+            
+            recommendedMoviesID.add(movieID);
+        }
+    }
+    return recommendedMoviesID;
 }
 
     public static void main(String[] args) {

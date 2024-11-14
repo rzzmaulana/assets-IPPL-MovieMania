@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Movie;
 import java.sql.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -173,5 +174,8 @@ public class MovieDao {
      return movies;
     }
 
+    
+    
 
+    
 }

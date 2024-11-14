@@ -140,6 +140,7 @@ a{
                      List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
                      List<Movie>filteredMovies=(List<Movie>) request.getSession().getAttribute("FilteredMovies");
                      User user=(User) request.getSession().getAttribute("user");
+                     
                     // Check if filteredMovies is available, otherwise use movies
                     List<Movie> displayMovies = new ArrayList<>();
                     if(filteredMovies!=null){
@@ -154,7 +155,7 @@ a{
             <div class="nav-left">
                 <p>Hi <%= user.getUsername()%> 👋 Mau nonton apa hari ini! </p>
                 <a href="\views\HomeUser.jsp">Home</a>
-                <a href="#">Recommend Movies</a>
+                <a href="\views\MoviRecommendation.jsp">Recommend Movies</a>
                 <a href="\">Back</a>
             </div>
             <div class="nav-right">

@@ -9,6 +9,7 @@ import model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +59,12 @@ public class UserController extends HttpServlet implements Sign{
         }
             
            
+         try {
+                List<Integer>recommendID=getRecommendation(request,response);
+                request.getSession().setAttribute("recommendID", recommendID);
+            } catch (SQLException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
      
 
@@ -67,8 +74,11 @@ public class UserController extends HttpServlet implements Sign{
         response.sendRedirect("/views/HomeUser.jsp");
         
     } else if ("recommendation".equals(action)) {
-        // Code for recommendation action
-        response.getWriter().print("recommendation");
+            
+       
+        
+        
+       response.sendRedirect("/views/MoviRecommendation.jsp");
         
     }
     }
@@ -122,6 +132,26 @@ public class UserController extends HttpServlet implements Sign{
             response.getWriter().println("Invalid username or password.");
             response.sendRedirect("/views/SignIn.jsp");
         } 
+    }
+    
+    protected List<Integer> getRecommendation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        User user=(User)request.getSession().getAttribute("user");
+        int userID=user.getUserID();
+        
+        List<String>genres=userDao.getHighlyRatedGenres(userID,7);
+        List<Integer>recommendID=userDao.getRecommendedMoviesIDByGenres(genres);
+        
+        
+       
+      return recommendID;
+    
+    
+    
+    
+    
+    
+    
+    
     }
 }
 

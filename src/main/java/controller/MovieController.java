@@ -64,14 +64,14 @@ public class MovieController  extends HttpServlet{
        // response.getWriter().print("apake");
         response.sendRedirect("/views/PageFilm.jsp");
         
-    }else if(("editMovie").equals(action)){
+    }else if(("PageeditMovie").equals(action)){
         List<User> listUser=userDao.getAllUsers();
-        Movie movie=displayMovie(request,response);
-        movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
+        //Movie movie=displayMovie(request,response);
+        //movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
         
-        request.getSession().setAttribute("SingleMovie", movie);
+        //request.getSession().setAttribute("SingleMovie", movie);
         request.getSession().setAttribute("listUser", listUser);
-             response.sendRedirect("/views/HomeAdmin.jsp");
+        response.sendRedirect("/views/HomeAdmin.jsp");
     }else if(("DisplayFilmAdmin").equals(action)){
           
         List<User> listUser=userDao.getAllUsers();
@@ -91,6 +91,11 @@ public class MovieController  extends HttpServlet{
         request.getSession().setAttribute("FilteredMovies", filteredMovies);
         
         response.sendRedirect("/views/HomeAdmin.jsp");
+    }else if("searchMovieInRecommendation".equals(action)){
+        List<Movie> filteredMovies = searchMovie(request,response);
+        request.getSession().setAttribute("FilteredMovies", filteredMovies);
+        
+        response.sendRedirect("/views/MoviRecommendation.jsp");
     }
     }
 
@@ -104,6 +109,10 @@ public class MovieController  extends HttpServlet{
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        Movie movie=displayMovie(request,response);
+        movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
+        request.getSession().setAttribute("SingleMovie", movie);
         if ("addMovie".equals(action)) {
             AddMovie(request, response);
         } else if ("deleteMovie".equals(action)) {
@@ -302,9 +311,5 @@ public class MovieController  extends HttpServlet{
     }
     
     
-    
-    
-    
-
     
 }
