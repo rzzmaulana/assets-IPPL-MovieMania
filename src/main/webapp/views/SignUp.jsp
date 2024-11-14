@@ -4,6 +4,7 @@
     Author     : acer
 --%>
 
+<%@page import="java.lang.String"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -132,8 +133,18 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
+  <%
+    String notifGagal = (String) request.getSession().getAttribute("notifGagal");
+    if (notifGagal == null || notifGagal.isEmpty()) {
+        notifGagal = "";
+    }
+%>
+
+  
   <body>
+      
      <div class="signup-container">
+       <p><%=notifGagal%> <style>color:red </style></p>
       <h2>Sign Up</h2>
       <form action="/User" method="post">
        <input type="hidden" name="action" value="signup">

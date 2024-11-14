@@ -154,8 +154,8 @@ a{
         <nav>
             <div class="nav-left">
                 <p>Hi <%= user.getUsername()%> 👋 Mau nonton apa hari ini! </p>
-                <a href="\views\HomeUser.jsp">Home</a>
-                <a href="\views\MoviRecommendation.jsp">Recommend Movies</a>
+                <a href="/User?action=display">Home</a>
+                <a href="/User?action=recommendation">Recommend Movies</a>
                 <a href="\">Back</a>
             </div>
             <div class="nav-right">

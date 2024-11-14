@@ -108,6 +108,9 @@ public class UserController extends HttpServlet implements Sign{
             response.sendRedirect("/views/SignIn.jsp"); // Redirect after successful registration
         } else {
             response.getWriter().println("Sign up failed. Try again.");
+            String notifGagal="username sudah dipakai!";
+            request.getSession().setAttribute("notifGagal", notifGagal);
+            response.sendRedirect("/views/SignUp.jsp");
         }
     }
 
