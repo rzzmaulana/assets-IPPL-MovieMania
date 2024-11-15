@@ -138,8 +138,7 @@ a{
     <header>
         <nav>
             <div class="nav-left">
-                <a href="#">Home</a>
-                <a href="#">Recommend Movies</a>
+               
             </div>
             <div class="nav-right">
                 <form action="/Movie" method="get">
@@ -155,11 +154,8 @@ a{
         <section class="movie-section">
             <div class="movie-grid">
                 <%
-                     List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
-                     List<Movie>filteredMovies=(List<Movie>) request.getSession().getAttribute("FilteredMovies");
-                     User user=(User) request.getSession().getAttribute("user");
-                    // Check if filteredMovies is available, otherwise use movies
-                    List<Movie> displayMovies = (filteredMovies != null) ? filteredMovies : movies;
+                    
+                    List<Movie> displayMovies = (List<Movie>) request.getSession().getAttribute("displayMovie");
                 %>
                 
                 <% if (displayMovies != null && !displayMovies.isEmpty()) { %>

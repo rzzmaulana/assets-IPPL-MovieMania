@@ -44,6 +44,7 @@ public class MovieController  extends HttpServlet{
         try {
             List<Movie>movies=movieDao.getAllMovies();
             request.getSession().setAttribute("movies", movies);
+            request.getSession().setAttribute("displayMovie",movies);
             
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,8 +67,9 @@ public class MovieController  extends HttpServlet{
         
     }else if(("PageeditMovie").equals(action)){
         List<User> listUser=userDao.getAllUsers();
+        
         //Movie movie=displayMovie(request,response);
-        //movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
+         //movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
         
         //request.getSession().setAttribute("SingleMovie", movie);
         request.getSession().setAttribute("listUser", listUser);
@@ -89,7 +91,7 @@ public class MovieController  extends HttpServlet{
     }else if("searchMovieAdmin".equals(action)){
         List<Movie> filteredMovies = searchMovie(request,response);
         request.getSession().setAttribute("FilteredMovies", filteredMovies);
-        
+        searchMovieAdmin(request,response);
         response.sendRedirect("/views/HomeAdmin.jsp");
     }else if("searchMovieInRecommendation".equals(action)){
         List<Movie> filteredMovies = searchMovie(request,response);
@@ -110,16 +112,24 @@ public class MovieController  extends HttpServlet{
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Movie movie=displayMovie(request,response);
-        movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
-        request.getSession().setAttribute("SingleMovie", movie);
+        
         if ("addMovie".equals(action)) {
             AddMovie(request, response);
         } else if ("deleteMovie".equals(action)) {
             deleteMovie(request,response);
         }else if("EditMovie".equals(action)){
+            
+            Movie movie=displayMovie(request,response);
+            movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
+            request.getSession().setAttribute("SingleMovie", movie);
+            
             editMovie(request,response);
         }else if("addReview".equals(action)){
+            Movie movie=displayMovie(request,response);
+            movie.setReview(ReviewDao.getReviewsByMovieID(movie.getMovieID()));
+            request.getSession().setAttribute("SingleMovie", movie);
+            
+            
             AddReview(request,response);
         }else {
           response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
@@ -317,6 +327,25 @@ public class MovieController  extends HttpServlet{
         
        
        
+    }
+    
+    protected void searchMovieAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
+        List<Movie>filteredMovies=(List<Movie>) request.getSession().getAttribute("FilteredMovies");
+        
+        List<Movie> displayMovies = (filteredMovies != null) ? filteredMovies : movies;
+        
+        for (Movie movie : displayMovies) {   
+              for(Movie film : movies) {
+                     if(film.getMovieID() == movie.getMovieID()) {    
+                            String newTitle = film.getTitle();
+                            movie.setTitle(newTitle);
+                       }
+                  }
+              
+            }
+        
+       request.getSession().setAttribute("displayMovie",displayMovies);
     }
     
     

@@ -20,7 +20,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-       background-image: url("image/bgAdd.jpeg");
+       background-image: url("${pageContext.request.contextPath}/image/bgAdd.jpeg");
       margin: 0;
       font-family: "Poppins", sans-serif;
     }
