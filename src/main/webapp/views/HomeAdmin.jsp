@@ -164,7 +164,7 @@ a{
                             <div class="movie-card">
                                 <div class="movie-thumbnail">
                                     <!-- Display the poster image -->
-                                    <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+                                   <img src="${pageContext.request.contextPath}/<%= movie.getPosterUrl() %>" style="width: 100%; border-radius: 10px;" />
                                 </div>
                                 <p class="movie-title"><%= movie.getTitle() %></p>
                                 <p class="movie-title"><%= movie.getGenre() %></p>

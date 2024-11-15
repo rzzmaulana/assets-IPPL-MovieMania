@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/uploaded-images/*")
+@WebServlet("/uploaded_images/*")
 public class ExternalImageServlet extends HttpServlet {
     private static final String IMAGE_DIR = "C:/uploaded_images";
 
