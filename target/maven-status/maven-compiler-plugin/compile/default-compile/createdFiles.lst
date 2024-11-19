@@ -10,3 +10,4 @@ dao\MovieDao.class
 model\Sign.class
 model\Reviews.class
 model\User.class
+controller\ExternalImageServlet.class

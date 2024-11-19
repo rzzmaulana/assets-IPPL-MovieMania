@@ -174,7 +174,7 @@ a{
                 <div class="movie-thumbnail">
                     <!-- Display the poster image -->
                     
-                    <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+                   <img src="${pageContext.request.contextPath}/<%= movie.getPosterUrl() %>" height="200" />
                 </div>
                 <p class="movie-title"><%= movie.getTitle() %></p>
                 <p class="movie-title"><%= movie.getGenre() %></p>

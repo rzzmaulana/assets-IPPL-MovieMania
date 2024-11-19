@@ -4,6 +4,7 @@
  */
 package dao;
 
+import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import model.User;
 
@@ -22,12 +25,36 @@ import model.User;
 public class UserDao {
   private final String url ="jdbc:mysql://localhost:3306/mydb";
     private final String user = "root";
-    private final String pasword = "ori2305";
+    private final String pasword = "Kiki123890.";
     public UserDao(){};
     
     
     
-    
+    public boolean editUser(int id,String username, String fullName, String description,String pictureUrl){
+         String query ="update users set username=?, fullname=?,description=?,profile_picture_url=? where UserID=?";
+         try{
+             Class.forName("com.mysql.cj.jdbc.Driver");
+         }catch(ClassNotFoundException e){
+            System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+            return false;
+             
+         }
+         try(Connection conn=DriverManager.getConnection(url, user, pasword);
+                 PreparedStatement stmt=conn.prepareStatement(query);){
+                 stmt.setString(1, username);
+                 stmt.setString(2, fullName);
+                 stmt.setString(3, description);
+                 stmt.setString(4, pictureUrl);
+                  stmt.setString(5, id+"");
+                 out.println(stmt);
+                 return stmt.executeUpdate()>0;
+         } catch (SQLException ex) {
+           
+          Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+      }
+         
+    }
     // Method to insert a new user
     public boolean insertUser(String username, String password) {
         String checkQuery = "SELECT username FROM users WHERE username = ?";
@@ -149,7 +176,7 @@ public class UserDao {
         
     
     public User selectUser(String username, String password) {
-    String query = "SELECT userID, username, password, fullname FROM users WHERE username = ? AND password = ? AND isAdmin = ?";
+    String query = "SELECT * FROM users WHERE username = ? AND password = ? AND isAdmin = ?";
     User userr = null; // Initialize as null to return if not found
 
     // Load MySQL JDBC Driver
@@ -175,9 +202,18 @@ public class UserDao {
             String dbUsername = resultSet.getString("username");
             String dbPassword = resultSet.getString("password");
             String fullname = resultSet.getString("fullname");
-            
+           
             // Create a User object with userID, username, password, and fullname
             userr = new User(dbUsername, dbPassword);
+            out.println("Lihatt");
+            if(resultSet.getString("description")!=null){
+                out.println("MASUKKKKKKKKKKKKKK");
+                userr.setDescription(resultSet.getString("description"));
+            }
+            if(resultSet.getString("profile_picture_url")!=null){
+                userr.setPictureUrl(resultSet.getString("profile_picture_url"));
+            }
+            
             userr.setID(userID);
             userr.setFullname(fullname);
         }

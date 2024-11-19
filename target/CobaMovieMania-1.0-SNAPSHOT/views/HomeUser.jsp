@@ -148,7 +148,9 @@ a{
                     }else{
                        displayMovies=movies;
                     }
+                     out.print(movies.get(4).getPosterUrl());
  %>
+ 
 <body>
     <header>
         <nav>
@@ -171,7 +173,7 @@ a{
     <main>
         <section class="movie-section">
             <div class="movie-grid">
-                
+               
                 
                 <% if (!displayMovies.isEmpty()) { %>
     <% for (Movie movie : displayMovies) { %>
@@ -185,9 +187,10 @@ a{
                                 String newTitle = film.getTitle();
                                 movie.setTitle(newTitle);
                             }
+                            
                         }
                     %>
-                    <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+                    <img src="${pageContext.request.contextPath}/<%= movie.getPosterUrl() %>" style="height: 100%;width: 100%; border-radius: 10px;" />
                 </div>
                 <p class="movie-title"><%= movie.getTitle() %></p>
                 <p class="movie-title"><%= movie.getGenre() %></p>

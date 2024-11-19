@@ -4,6 +4,7 @@
     Author     : acer
 --%>
 
+<%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -111,21 +112,38 @@ body {
 .save-button:hover {
     background-color: rgba(255, 255, 255, 0.25);
 }
+#success{
+  color:chartreuse;
+}
+#fail{
+    color:red;
+}
 
     </style>
   </head>
 
   <body>
-    <div class="profile-container">
-      <h2>Edit Profile</h2>
-      <form action="#" method="post" class="profile-form">
+    <%=((User)request.getSession().getAttribute("user")).getUserID()%>  
+    <%boolean res= request.getSession().getAttribute("isEditSuccess")!=null?(boolean)request.getSession().getAttribute("isEditSuccess"):false;
+      if(res){
+           %><p id="success">User Profile Berhasil di Ubah</p><%
+               
+        }else{
+            %><p id="fail">User Profile Gagal di Ubah</p><%
+}
+    %>
+    <%
+    request.getSession().removeAttribute("isEditSuccess");
+%>
+    <form action="/User" method="Post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="editUserProfile" enctype="multipart/form-data">
         <div class="form-group">
           <label for="username">Username</label>
           <input
             type="text"
             id="username"
             name="username"
-            value="orimkhoirul"
+      
             required
           />
         </div>
@@ -134,15 +152,33 @@ body {
           <input
             type="text"
             id="full-name"
-            name="full-name"
-            value="Mochammad Khoirullutfansyah"
+            name="fullName"
+      
+            required
+          />
+         </div>
+        <div class="form-group">
+          <label for="description">Profile Description</label>
+          <input
+            type="text"
+            id="description"
+            name="description"
             required
           />
         </div>
+        <div class="form-group">
+          <label for="profileImage">Profile Image</label>
+          <input
+            type="file"
+            id="profileImage"
+            name="profilePicture"
+            accept="image/*"
+            required
+          />
+        </div>
+        <input type="submit">
+    </form>
 
-        <button type="submit" class="save-button">Save Changes</button>
-      </form>
-    </div>
   </body>
 </html>
 

@@ -6,6 +6,7 @@
 
 <%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -190,12 +191,12 @@
       }
     </style>
   </head>
-  <body>
-       
+  
+        
+      <jsp:include page="/views/userHeader.jsp" />
 
     <div class="admin-panel">
       <span class="icon-handwave">👋 Welcome To Movie Mania!</span>
-
       <p>What would you like to do?</p>
 
       <div class="d-flex justify-content-center gap-3">
@@ -204,14 +205,13 @@
         </button>
         <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href='/User?action=recommendation'">
           Movies Recommendation
-        </button>
-        
+        </button>    
       </div>
     </div>
 
     <!-- Bootstrap JS (optional) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-  </body>
+  
 </html>
 

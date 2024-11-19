@@ -110,7 +110,7 @@
       
     <div class="container">
     <div class="movie-title">
-        <img src="<%= movie.getPosterUrl() %>" alt="<%= movie.getTitle() %> Poster" />
+       <img src="${pageContext.request.contextPath}/<%= movie.getPosterUrl() %>" style="height:90%;width: 100%; border-radius: 10px;" />
     </div>
     <div class="Info">
         <div class="Judul">

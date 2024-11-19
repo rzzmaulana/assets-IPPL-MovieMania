@@ -20,7 +20,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: white;
+      
       margin: 0;
       font-family: "Poppins", sans-serif;
     }
@@ -32,7 +32,8 @@
       text-align: center;
       width: 400px;
       height: 400px;
-      background-image: url("image/bgSignUP.jpeg");
+      background-image: url("${pageContext.request.contextPath}/image/bgAdd.jpeg");
+      
     }
 
     .signup-container h2 {

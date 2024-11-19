@@ -146,7 +146,7 @@
     <div class="container">
         <!-- Left Side: Movie Poster and Title -->
         <div class="left-side">
-            <img src="<%= movie.getPosterUrl() != null ? movie.getPosterUrl() : "poster-placeholder.jpg" %>" alt="<%= movie.getTitle() %> Poster">
+           <img src="${pageContext.request.contextPath}/<%= movie.getPosterUrl() %>" style="width: 100%; border-radius: 10px;" />
             <div class="movie-title"><%= movie.getTitle() %></div>
         </div>
 

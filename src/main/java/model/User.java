@@ -12,24 +12,50 @@ import java.util.List;
  * @author acer
  */
 public class User {
+
     protected  int userID;
     protected String username;
     protected String password;
     protected String fullname;
+    private String description;
+    private String pictureUrl;
     protected List<Reviews>review;
     final protected boolean isAdmin=false;
       // Aggregation relationship with Review
 
     public User(){};
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
     
+    public User(int userID, String username, String password, String fullname, String description, String pictureUrl) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+        this.description = description;
+        this.pictureUrl = pictureUrl;
+    }
     public User( String username, String password) {
         
         this.username = username;
         this.password = password;
-       
+       }
         
-    }
-    
+
     public String getUsername(){
         return username;
     }

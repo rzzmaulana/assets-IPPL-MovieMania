@@ -5,6 +5,7 @@
 package controller;
 import dao.MovieDao;
 import dao.UserDao;
+import java.io.File;
 import model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,10 +15,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import model.Movie;
 import model.Sign;
 
@@ -25,11 +28,12 @@ import model.Sign;
  *
  * @author acer
  */
+@MultipartConfig
 @WebServlet(name = "UserController", urlPatterns = {"/User"})
 public class UserController extends HttpServlet implements Sign{
     private UserDao userDao;
     private MovieDao movieDao;
-
+    private final String uploadDirectory = "C:/uploaded_images";
     
     public UserController(){
         userDao=new UserDao();
@@ -62,7 +66,7 @@ public class UserController extends HttpServlet implements Sign{
             
      
 
-    if ("display".equals(action)) {
+    if("display".equals(action)) {
       
         
        DisplayMovie(request,response);
@@ -93,15 +97,44 @@ public class UserController extends HttpServlet implements Sign{
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if ("signup".equals(action)) {
+        if("signup".equals(action)) {
             SignUp(request, response);
         } else if ("signin".equals(action)) {
             login(request, response);
-        } else {
+        }else if("editUserProfile".equals(action)){
+             editUserProfile(request, response);
+        }else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
         }
     }
+    public void editUserProfile(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        String userName=request.getParameter("username");
+        String fullName=request.getParameter("fullName");
+        String description=request.getParameter("description");
+            
+        Part filePart = request.getPart("profilePicture");
+        String fileName = filePart.getSubmittedFileName();
+        String filePath = uploadDirectory + File.separator + fileName;
 
+        // Save the file to the server
+        File fileSaveDir = new File(uploadDirectory);
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdirs(); // Create the directory if it does not exist
+        }
+        filePart.write(filePath);
+        // Relative path to store in the database
+        String relativePath = "uploaded_images/" + fileName;
+        
+        boolean res=userDao.editUser(((User)request.getSession().getAttribute("user")).getUserID(), userName, fullName, description, relativePath);
+        if(res){
+            request.getSession().setAttribute("isEditSuccess", res);
+             request.getSession().setAttribute("user", new User(((User)request.getSession().getAttribute("user")).getUserID(), userName,((User)request.getSession().getAttribute("user")).getPassword(), fullName, description, relativePath));
+            response.sendRedirect("/views/editUser.jsp");
+        }else {
+        request.getSession().setAttribute("isEditSuccess", false);
+        response.sendRedirect("/views/editUser.jsp");
+    }
+    }
     public void SignUp(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -129,8 +162,6 @@ public class UserController extends HttpServlet implements Sign{
         boolean validateAdmin=userDao.validateAdmin(username, password);
         if (validateUser) {
             User user=userDao.selectUser(username, password);
-            
-           
             request.getSession().setAttribute("user", user);
             response.sendRedirect("/views/UserWelcome.jsp"); // Redirect to dashboard if sign-in is successful
         }else if(validateAdmin){
