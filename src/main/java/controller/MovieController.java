@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controller;
+import dao.ReviewDao;
 import dao.MovieDao;
 import dao.UserDao;
 import java.io.IOException;

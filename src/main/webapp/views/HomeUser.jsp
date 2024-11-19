@@ -26,7 +26,7 @@
 }
 
 body {
-    background-color: #6b4ce6;
+    background-image: url("${pageContext.request.contextPath}/image/bgAdd.jpeg");
     color: white;
     display: flex;
     flex-direction: column;
@@ -105,11 +105,12 @@ main {
 }
 
 .movie-card {
-    background-color: rgba(255, 255, 255, 0.1);
+    
     border-radius: 10px;
     text-align: center;
     padding: 10px;
     transition: transform 0.3s;
+    background-color: #3b2c8d;
 }
 
 .movie-card:hover {
@@ -148,7 +149,7 @@ a{
                     }else{
                        displayMovies=movies;
                     }
-                     out.print(movies.get(4).getPosterUrl());
+                     
  %>
  
 <body>

@@ -28,7 +28,7 @@
         width: 100%;
         height: 100vh;
         font-family: "Poppins";
-        background-image: url("image/bgAdd.jpeg");
+        background-image: url("${pageContext.request.contextPath}/image/bgAdd.jpeg");
         background-size: cover;
         background-color: #6c5ce7;
       }

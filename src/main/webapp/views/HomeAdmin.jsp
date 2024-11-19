@@ -25,7 +25,7 @@
 }
 
 body {
-    background-color: #6b4ce6;
+    background-image: url("${pageContext.request.contextPath}/image/bgAdd.jpeg");
     color: white;
     display: flex;
     flex-direction: column;
@@ -49,11 +49,13 @@ nav {
     color: white;
 }
 
-.nav-left a {
+.nav-left  a{
     margin-right: 15px;
+    margin-top: 15px;
     text-decoration: none;
     color: white;
     font-weight: bold;
+    
 }
 
 .nav-right {
@@ -102,11 +104,12 @@ main {
 }
 
 .movie-card {
-    background-color: rgba(255, 255, 255, 0.1);
+    
     border-radius: 10px;
     text-align: center;
     padding: 10px;
     transition: transform 0.3s;
+    background-color: #3b2c8d;
 }
 
 .movie-card:hover {
@@ -133,12 +136,14 @@ a{
     </style>
     
 </head>
-
+<%  User user=(User) request.getSession().getAttribute("user");%>
 <body>
     <header>
         <nav>
             <div class="nav-left">
+                <p>👋 Halo  <%= user.getUsername()%>  </p>
                
+                <a href="\">Back</a>
             </div>
             <div class="nav-right">
                 <form action="/Movie" method="get">
@@ -164,7 +169,7 @@ a{
                             <div class="movie-card">
                                 <div class="movie-thumbnail">
                                     <!-- Display the poster image -->
-                                   <img src="${pageContext.request.contextPath}/<%= movie.getPosterUrl() %>" style="width: 100%; border-radius: 10px;" />
+                                   <img src="${pageContext.request.contextPath}/<%= movie.getPosterUrl() %>" style="height: 100%;width: 100%; border-radius: 10px;" />
                                 </div>
                                 <p class="movie-title"><%= movie.getTitle() %></p>
                                 <p class="movie-title"><%= movie.getGenre() %></p>
