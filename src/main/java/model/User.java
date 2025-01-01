@@ -72,7 +72,9 @@ public class User {
         this.username = username;
     }
 
-    
+    public String getFullname(){
+        return fullname;
+    }
     
     public String getPassword() {
         return password;

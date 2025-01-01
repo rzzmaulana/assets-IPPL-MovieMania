@@ -1,4 +1,3 @@
-controller\ReviewDao.class
 com\mycompany\cobamoviemania\JakartaRestConfiguration.class
 controller\UserController.class
 com\mycompany\cobamoviemania\resources\JakartaEE8Resource.class
@@ -7,6 +6,7 @@ controller\MovieController.class
 model\Movie.class
 controller\MainController.class
 dao\MovieDao.class
+dao\ReviewDao.class
 model\Sign.class
 model\Reviews.class
 model\User.class

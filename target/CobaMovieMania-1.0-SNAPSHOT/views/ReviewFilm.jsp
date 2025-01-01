@@ -36,7 +36,7 @@
         }
         .container {
             display: flex;
-            background-color: #5a4fcf;
+             background-image: url("${pageContext.request.contextPath}/image/bgAdd.jpeg");
             border-radius: 20px;
             padding: 20px;
             width: 95%;
@@ -50,19 +50,26 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgb(215, 209, 252);
             border-radius: 15px;
+            max-height:80%;
+            max-width: 350px;
         }
         .left-side img {
-            width: 90%;
-            max-width: 250px;
+            width: 50%;
+            max-width: 350px;
             border-radius: 15px;
             margin-bottom: 15px;
+            padding:15px;
+            max-height:100%;
+           
+            
         }
         .movie-title {
             font-size: 1.5rem;
             font-weight: bold;
             text-align: center;
+            
         }
         .right-side {
             flex: 2;

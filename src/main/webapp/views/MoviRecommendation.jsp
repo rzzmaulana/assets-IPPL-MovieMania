@@ -180,6 +180,7 @@ a{
                 <p class="movie-title"><%= movie.getTitle() %></p>
                 <p class="movie-title"><%= movie.getGenre() %></p>
                 <p class="movie-title"><%= movie.getReleaseDate() %></p>
+                
             </div>
         </a>
     <% } %>

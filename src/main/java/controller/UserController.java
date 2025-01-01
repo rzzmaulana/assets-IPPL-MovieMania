@@ -28,7 +28,7 @@ import model.Sign;
  *
  * @author acer
  */
-@MultipartConfig
+@MultipartConfig 
 @WebServlet(name = "UserController", urlPatterns = {"/User"})
 public class UserController extends HttpServlet implements Sign{
     private UserDao userDao;
@@ -45,7 +45,7 @@ public class UserController extends HttpServlet implements Sign{
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String action = request.getParameter("action");
-            out.print(request.getContextPath());
+            
         }
     }
 
@@ -84,7 +84,7 @@ public class UserController extends HttpServlet implements Sign{
                  List<Movie> displayMovies=getRecommendation(request,response);
                  
                  request.getSession().setAttribute("displayMovie",displayMovies);
-        
+                 
                  response.sendRedirect("/views/MoviRecommendation.jsp");
             } catch (SQLException ex) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -110,7 +110,7 @@ public class UserController extends HttpServlet implements Sign{
     public void editUserProfile(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         String userName=request.getParameter("username");
         String fullName=request.getParameter("fullName");
-        String description=request.getParameter("description");
+        
             
         Part filePart = request.getPart("profilePicture");
         String fileName = filePart.getSubmittedFileName();
@@ -122,13 +122,14 @@ public class UserController extends HttpServlet implements Sign{
             fileSaveDir.mkdirs(); // Create the directory if it does not exist
         }
         filePart.write(filePath);
+        
         // Relative path to store in the database
         String relativePath = "uploaded_images/" + fileName;
         
-        boolean res=userDao.editUser(((User)request.getSession().getAttribute("user")).getUserID(), userName, fullName, description, relativePath);
+        boolean res=userDao.editUser(((User)request.getSession().getAttribute("user")).getUserID(), userName, fullName, relativePath);
         if(res){
             request.getSession().setAttribute("isEditSuccess", res);
-             request.getSession().setAttribute("user", new User(((User)request.getSession().getAttribute("user")).getUserID(), userName,((User)request.getSession().getAttribute("user")).getPassword(), fullName, description, relativePath));
+             request.getSession().setAttribute("user", new User(((User)request.getSession().getAttribute("user")).getUserID(), userName,((User)request.getSession().getAttribute("user")).getPassword(), fullName, "", relativePath));
             response.sendRedirect("/views/editUser.jsp");
         }else {
         request.getSession().setAttribute("isEditSuccess", false);
@@ -163,6 +164,7 @@ public class UserController extends HttpServlet implements Sign{
         if (validateUser) {
             User user=userDao.selectUser(username, password);
             request.getSession().setAttribute("user", user);
+            //response.getWriter().print(user.getUsername()+""+user.getUserID()+""+user.getPassword());
             response.sendRedirect("/views/UserWelcome.jsp"); // Redirect to dashboard if sign-in is successful
         }else if(validateAdmin){
             User user=userDao.selectAdmin(username, password);
@@ -186,8 +188,9 @@ public class UserController extends HttpServlet implements Sign{
         int userID=user.getUserID();
         
         List<String>genres=userDao.getHighlyRatedGenres(userID,7);
+         //response.getWriter().print(userID);
         List<Integer>recommendID=userDao.getRecommendedMoviesIDByGenres(genres);
-        
+       
         List<Movie> movies = (List<Movie>) request.getSession().getAttribute("movies");
         List<Movie>recommendMovies=new ArrayList<>();
         List<Movie>filteredMovies=(List<Movie>) request.getSession().getAttribute("FilteredMovies");

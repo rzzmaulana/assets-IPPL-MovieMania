@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -25,13 +26,13 @@ import model.User;
 public class UserDao {
   private final String url ="jdbc:mysql://localhost:3306/mydb";
     private final String user = "root";
-    private final String pasword = "Kiki123890.";
+    private final String pasword = "ori2305";
     public UserDao(){};
     
     
     
-    public boolean editUser(int id,String username, String fullName, String description,String pictureUrl){
-         String query ="update users set username=?, fullname=?,description=?,profile_picture_url=? where UserID=?";
+    public boolean editUser(int id,String username, String fullName ,String pictureUrl){
+         String query ="update users set username=?, fullname=?, picture_url=? where UserID=?";
          try{
              Class.forName("com.mysql.cj.jdbc.Driver");
          }catch(ClassNotFoundException e){
@@ -43,9 +44,9 @@ public class UserDao {
                  PreparedStatement stmt=conn.prepareStatement(query);){
                  stmt.setString(1, username);
                  stmt.setString(2, fullName);
-                 stmt.setString(3, description);
-                 stmt.setString(4, pictureUrl);
-                  stmt.setString(5, id+"");
+                 stmt.setString(3, pictureUrl);
+                
+                  stmt.setInt(4,id);
                  out.println(stmt);
                  return stmt.executeUpdate()>0;
          } catch (SQLException ex) {
@@ -177,53 +178,56 @@ public class UserDao {
     
     public User selectUser(String username, String password) {
     String query = "SELECT * FROM users WHERE username = ? AND password = ? AND isAdmin = ?";
-    User userr = null; // Initialize as null to return if not found
+                   
+    User userr = new User();
 
-    // Load MySQL JDBC Driver
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (ClassNotFoundException e) {
         System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
     }
 
-    // Try to connect to the database and execute the query
-    try (Connection conn = DriverManager.getConnection(url, user, pasword); // Use DB credentials, not user’s password
+    try (Connection conn = DriverManager.getConnection(url, user, pasword);
          PreparedStatement statement = conn.prepareStatement(query)) {
         
         statement.setString(1, username);
         statement.setString(2, password);
         statement.setString(3, "0"); // Assuming 0 is for a regular user, not an admin
-        
+
         ResultSet resultSet = statement.executeQuery();
-        
-        // If a matching user is found, create a User object
+
         if (resultSet.next()) {
-            int userID = resultSet.getInt("userID"); // Retrieve userID
+            // Debugging: Print all columns
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                System.out.println("Column: " + metaData.getColumnName(i) + " = " + resultSet.getString(i));
+            }
+
+            // Map ResultSet to User object
+            int userID = resultSet.getInt("userID");
             String dbUsername = resultSet.getString("username");
             String dbPassword = resultSet.getString("password");
             String fullname = resultSet.getString("fullname");
-           
-            // Create a User object with userID, username, password, and fullname
-            userr = new User(dbUsername, dbPassword);
-            out.println("Lihatt");
-            if(resultSet.getString("description")!=null){
-                out.println("MASUKKKKKKKKKKKKKK");
-                userr.setDescription(resultSet.getString("description"));
-            }
-            if(resultSet.getString("profile_picture_url")!=null){
-                userr.setPictureUrl(resultSet.getString("profile_picture_url"));
-            }
+            String picture_url = resultSet.getString("picture_url");
+
             
+            userr.setUsername(username);
+            userr.setPassword(password);
             userr.setID(userID);
             userr.setFullname(fullname);
-        }
+            userr.setPictureUrl(picture_url);
 
+            
+            
+        }
     } catch (SQLException e) {
         System.out.println("Error validating user: " + e.getMessage());
     }
 
     return userr; // Returns the User object if found, or null if not found
 }
+ // Returns the User object if found, or null if not found
+
 
     public User selectAdmin(String username, String password) {
     String query = "SELECT userID, username, password, fullname FROM users WHERE username = ? AND password = ? AND isAdmin = ?";

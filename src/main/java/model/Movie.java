@@ -73,6 +73,25 @@ public class Movie {
         this.title=title;
         
     }
+    
+    public void setGenre(String genre) {
+        this.genre=genre;
+        
+    }
+    
+    public void setReleaseDate(Date date) {
+        this.releaseDate=date;
+    }
+    
+    public void setDescription(String desc) {
+        this.description=desc;
+        
+    }
+    
+    public void setRating(double rating) {
+        this.rating=this.calculateRating();
+        
+    }
 
     public float calculateRating() {
         if (reviews.isEmpty()) return 0;
